@@ -1,8 +1,10 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import TabNavigation from './TabNavigation';
+
 import Product from '../screen/Product';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import TabNavigation from './TabNavigation';
 
 const Stack = createNativeStackNavigator();
 
