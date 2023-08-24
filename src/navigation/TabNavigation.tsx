@@ -1,44 +1,110 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
+/* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/FontAwesome5'; // Import from FontAwesome5
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
+
 import Home from './../screen/Home';
 import Cart from './../screen/Cart';
 import Favorite from '../screen/Favorite';
 
 const Tab = createBottomTabNavigator();
 
+const styles = StyleSheet.create({
+  tabContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#6b4226', // Background color for the tab bar
+    borderTopWidth: 1,
+    borderTopColor: '#8a8a8a', // Border color for the tab bar
+    paddingHorizontal: 20,
+    paddingBottom: 10,
+    paddingTop: 5,
+  },
+  tabIcon: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  icon: {
+    fontSize: 30,
+    color: '#fff', // Icon color
+  },
+});
+
 const TabNavigation = () => {
   return (
     <Tab.Navigator
-      screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
-          let iconName;
-
-          if (route.name === 'Home') {
-            iconName = focused ? 'coffee' : 'coffee'; // Coffee cup icon for Home
-          } else if (route.name === 'Favorite') {
-            iconName = focused ? 'heart' : 'heart'; // Heart icon for Favorite
-          } else if (route.name === 'Cart') {
-            iconName = focused ? 'shopping-cart' : 'shopping-cart'; // Shopping cart icon for Cart
-          }
-
-          // Return the styled icon
-          return <Icon name={iconName} size={size} color={color} />;
-        },
-      })}
-      tabBarOptions={{
-        activeTintColor: '#6B4226', // Active tab icon color
-        inactiveTintColor: 'gray', // Inactive tab icon color
-        showLabel: false, // Hide tab labels
-        style: {
-          display: 'flex', // Flex display for the tab bar
-        },
-      }}>
+      screenOptions={{
+        headerShown: false, // Hide the header
+      }}
+      tabBar={props => (
+        <View style={styles.tabContainer}>
+          <TabBar {...props} />
+        </View>
+      )}>
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Favorite" component={Favorite} />
       <Tab.Screen name="Cart" component={Cart} />
     </Tab.Navigator>
   );
+};
+
+const TabBar = ({state, descriptors, navigation}) => {
+  return (
+    <>
+      {state.routes.map((route, index) => {
+        const {options} = descriptors[route.key];
+        const label =
+          options.tabBarLabel !== undefined
+            ? options.tabBarLabel
+            : options.title !== undefined
+            ? options.title
+            : route.name;
+
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name);
+          }
+        };
+
+        return (
+          <TouchableOpacity
+            onPress={onPress}
+            style={styles.tabIcon}
+            key={route.key}>
+            <Icon
+              name={getIconName(route.name)}
+              style={[styles.icon, {color: isFocused ? '#ffeead' : '#fff'}]}
+            />
+          </TouchableOpacity>
+        );
+      })}
+    </>
+  );
+};
+
+const getIconName = routeName => {
+  switch (routeName) {
+    case 'Home':
+      return 'coffee';
+    case 'Favorite':
+      return 'heart';
+    case 'Cart':
+      return 'shopping-cart';
+    default:
+      return 'coffee';
+  }
 };
 
 export default TabNavigation;
