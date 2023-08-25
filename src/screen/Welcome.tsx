@@ -11,7 +11,7 @@ import {
 const WelcomeScreen = ({navigation}) => {
   return (
     <ImageBackground
-            source={require('../image/wlcome.jpg')}
+      source={require('../image/wlcome.jpg')}
       style={styles.backgroundImage}>
       <View style={styles.contentContainer}>
         <View style={styles.textContainer}>
@@ -24,7 +24,7 @@ const WelcomeScreen = ({navigation}) => {
         </View>
         <TouchableOpacity
           style={styles.startButton}
-          onPress={() => navigation.navigate('MainTab')}>
+          onPress={() => navigation.navigate('TabNavigation')}>
           <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>
       </View>
