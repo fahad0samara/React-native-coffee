@@ -17,7 +17,7 @@ const Tab = createBottomTabNavigator();
 const styles = StyleSheet.create({
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#6b4226', // Background color for the tab bar
+    backgroundColor: '#955629', // Background color for the tab bar
     borderTopWidth: 1,
     borderTopColor: '#8a8a8a', // Border color for the tab bar
     paddingHorizontal: 20,

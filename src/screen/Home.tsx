@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   TextInput,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 import {
   widthPercentageToDP,
@@ -16,8 +17,39 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {StyleSheet} from 'react-native';
+import {coffeeCategories} from './../data/data';
+import {coffeeData} from '../data/data';
+import {useState} from 'react';
 
-const HomeScreen = ({navigation}) => {
+const Home = ({navigation}) => {
+  const [selectedCategory, setSelectedCategory] = useState('espresso');
+
+  const handleCategoryPress = categoryId => {
+    setSelectedCategory(categoryId);
+  };
+
+  const filteredCoffeeData = selectedCategory
+    ? coffeeData.filter(item => item.categoryId === selectedCategory)
+    : coffeeData;
+
+  const renderCategoryItem = ({item}) => (
+    <TouchableOpacity
+      style={[
+        styles.categoryItem,
+        selectedCategory === item.id && styles.selectedCategoryItem,
+      ]}
+      onPress={() => handleCategoryPress(item.id)}>
+      <Text style={styles.categoryName}>{item.name}</Text>
+    </TouchableOpacity>
+  );
+
+  const renderCoffeeItem = ({item}) => (
+    <View style={styles.coffeeItem}>
+      <Text style={styles.coffeeName}>{item.name}</Text>
+      <Text style={styles.coffeeDescription}>{item.description}</Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <StatusBar />
@@ -47,17 +79,32 @@ const HomeScreen = ({navigation}) => {
         </View>
 
         <TouchableOpacity
-            onPress={() => navigation.navigate('Search')} style={styles.searchBarContainer}>
-          
+          onPress={() => navigation.navigate('Search')}
+          style={styles.searchBarContainer}>
           <View style={styles.searchIconContainer}>
-            <Icon name="search" size={20} color="#6b4226" />
+            <Icon name="search" size={20} color="#955629" />
           </View>
           <TextInput
             style={styles.searchInput}
             placeholder="Search for products..."
-            placeholderTextColor="#6b4226"
+            placeholderTextColor="#955629"
           />
         </TouchableOpacity>
+        <FlatList
+          data={coffeeCategories}
+          keyExtractor={item => item.id}
+          renderItem={renderCategoryItem}
+          horizontal
+          contentContainerStyle={styles.categoryList}
+        />
+
+        {/* Display coffee data */}
+        <FlatList
+          data={filteredCoffeeData}
+          keyExtractor={item => item.id.toString()}
+          renderItem={renderCoffeeItem}
+          contentContainerStyle={styles.coffeeList}
+        />
       </SafeAreaView>
     </View>
   );
@@ -76,7 +123,7 @@ const styles = StyleSheet.create({
     height: heightPercentageToDP(9),
     borderBottomLeftRadius: widthPercentageToDP(15),
     borderBottomRightRadius: widthPercentageToDP(15),
-    backgroundColor: '#6b4226',
+    backgroundColor: '#955629',
   },
   leftImage: {
     height: widthPercentageToDP(15),
@@ -118,26 +165,59 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderTopLeftRadius: 20,
     borderBottomLeftRadius: 20,
-    borderColor:'#6b4226'
-
-
+    borderColor: '#955629',
   },
   searchInput: {
     flex: 1,
     padding: 10,
     fontSize: 16,
-    color: '#6b4226',
-
+    color: '#955629',
   },
   greetingText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#6b4226',
+    color: '#955629',
   },
   sloganText: {
     fontSize: 16,
-    color: '#6b4226',
+    color: '#955629',
+  },
+  categoryList: {
+    paddingHorizontal: widthPercentageToDP(4),
+    marginVertical: 20,
+  },
+  categoryItem: {
+    backgroundColor: '#955629',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  selectedCategoryItem: {
+    backgroundColor: '#6b4226', // Customize the selected category color
+  },
+  categoryName: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  coffeeList: {
+    paddingHorizontal: widthPercentageToDP(5),
+  },
+  coffeeItem: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#f2f2f2',
+    paddingVertical: 10,
+  },
+  coffeeName: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: '#955629',
+  },
+  coffeeDescription: {
+    color: '#955629',
+    marginTop: 5,
   },
 });
 
-export default HomeScreen;
+export default Home

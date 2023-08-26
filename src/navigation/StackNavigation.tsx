@@ -7,6 +7,9 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import TabNavigation from './TabNavigation';
 import Welcome from './../screen/Welcome';
 import Search from '../screen/Search';
+import Register from './../screen/Register';
+import Login from './../screen/Login';
+import Home from './../screen/Home';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,11 +20,27 @@ const StackNavigation = () => {
         screenOptions={{
           contentStyle: {backgroundColor: 'white'},
         }}>
+          <Stack.Screen
+  name="Register
+"
+  options={{headerShown: false}}
+  component={Register
+}
+/>
+
         <Stack.Screen
-          name="Welcome"
+          name="Login"
           options={{headerShown: false}}
-          component={Welcome}
+          component={Login
+
+}
         />
+        <Stack.Screen
+  name="Home"
+  options={{headerShown: false}}
+  component={Home}
+/>
+
 
         <Stack.Screen
           name="TabNavigation"
