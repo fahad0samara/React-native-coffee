@@ -1,115 +1,52 @@
 /* eslint-disable prettier/prettier */
-import React, {useState, useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  Image,
-  Text,
-  TextInput,
-  Alert,
-  Button,
-} from 'react-native';
-import SQLite from 'react-native-sqlite-storage';
+import React, {useState} from 'react';
+import {View, TextInput, Button, Alert} from 'react-native';
+import SQLite from 'react-native-sqlite-2';
 
-const db = SQLite.openDatabase(
-  {
-    name: 'MainDB',
-    location: 'default',
-  },
-  () => {},
-  error => {
-    console.log(error);
-  },
-);
+const db = SQLite.openDatabase('users.db');
 
-export default function Register({navigation}) {
-  const [name, setName] = useState('');
+const SignUpScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  useEffect(() => {
-    createTable();
-  }, []);
-
-  const createTable = () => {
+  const handleSignUp = () => {
     db.transaction(tx => {
       tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS ' +
-          'Users ' +
-          '(ID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT, Email TEXT, Password TEXT);',
+        'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT)',
+        [],
+      );
+
+      tx.executeSql(
+        'INSERT INTO users (email, password) VALUES (?, ?)',
+        [email, password],
+        (_, results) => {
+          if (results.rowsAffected > 0) {
+            Alert.alert('Success', 'Account created successfully');
+            navigation.navigate('Login');
+          } else {
+            Alert.alert('Error', 'Failed to create account');
+          }
+        },
+        (_, error) => {
+          Alert.alert('Error', 'Email already exists');
+        },
       );
     });
   };
 
-  const handleRegister = () => {
-    if (name.length === 0 || email.length === 0 || password.length === 0) {
-      Alert.alert('Warning!', 'Please fill in all fields.');
-    } else {
-      try {
-        db.transaction(async tx => {
-          await tx.executeSql(
-            'INSERT INTO Users (Name, Email, Password) VALUES (?,?,?)',
-            [name, email, password],
-          );
-        });
-        navigation.navigate('Login');
-      
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
   return (
-    <View style={styles.body}>
-      <Image style={styles.logo} source={require('../image/wlcome.jpg')} />
-      <Text style={styles.text}>Welcome</Text>
+    <View>
+      <TextInput placeholder="Email" value={email} onChangeText={setEmail} />
       <TextInput
-        style={styles.input}
-        placeholder="Enter your name"
-        onChangeText={value => setName(value)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your email"
-        onChangeText={value => setEmail(value)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your password"
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
         secureTextEntry
-        onChangeText={value => setPassword(value)}
       />
-      <Button title="Register" color="#1eb900" onPress={handleRegister} />
+      <Button title="Sign Up" onPress={handleSignUp} />
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#0080ff',
-  },
-  logo: {
-    width: 200,
-    height: 100,
-    margin: 20,
-  },
-  text: {
-    fontSize: 30,
-    color: '#ffffff',
-    marginBottom: 30,
-  },
-  input: {
-    width: 300,
-    borderWidth: 1,
-    borderColor: '#555',
-    borderRadius: 10,
-    backgroundColor: '#ffffff',
-    textAlign: 'center',
-     color:"black",
-    fontSize: 20,
-    marginBottom: 10,
-  },
-});
+export default SignUpScreen;
+ 
