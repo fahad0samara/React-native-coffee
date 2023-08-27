@@ -11,6 +11,7 @@ import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import Home from './../screen/Home';
 import Cart from './../screen/Cart';
 import Favorite from '../screen/Favorite';
+import Profile from '../screen/Profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,7 +36,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const TabNavigation = () => {
+const TabNavigation = ({route}) => {
+  const {user} = route.params;
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -49,6 +52,11 @@ const TabNavigation = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Favorite" component={Favorite} />
       <Tab.Screen name="Cart" component={Cart} />
+      <Tab.Screen name="Profile" component={Profile}
+              initialParams={{ user }}
+      
+       />
+
     </Tab.Navigator>
   );
 };

@@ -5,7 +5,7 @@ import SQLite from 'react-native-sqlite-2';
 
 const db = SQLite.openDatabase('users.db');
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -14,10 +14,16 @@ const LoginScreen = () => {
       tx.executeSql(
         'SELECT * FROM users WHERE email = ? AND password = ?',
         [email, password],
-        (_, results) => {
-          if (results.rows.length > 0) {
-            console.log("User logged in");
-            Alert.alert('Success', 'Logged in successfully');
+        (_, {rows}) => {
+          if (rows.length > 0) {
+            const user = rows.item(0);
+            if (user.role === 'admin') {
+              navigation.navigate('AdminHome');
+            } else {
+              navigation.navigate('TabNavigation',{user}
+);
+             
+            }
           } else {
             Alert.alert('Error', 'Invalid email or password');
           }
@@ -35,7 +41,7 @@ const LoginScreen = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Log In" onPress={handleLogin} />
+      <Button title="Login" onPress={handleLogin} />
     </View>
   );
 };
