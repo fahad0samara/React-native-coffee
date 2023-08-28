@@ -1,43 +1,32 @@
 import React from 'react';
 import {View, Text, Image, Button} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch, useSelector} from 'react-redux';
+import {logout} from '../redux/authSlice'; // Import your authSlice logout action
 
-const ProfileScreen = ({route, navigation}) => {
-  const user = route.params?.user; // Use optional chaining to safely access user
+const ProfileScreen = ({navigation}) => {
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.auth.user);
 
-  const handleLogout = async () => {
-    try {
-      await AsyncStorage.removeItem('isLoggedIn');
-      navigation.replace('Login');
-    } catch (error) {
-      console.error('Error logging out:', error);
-    }
+  const handleLogout = () => {
+    dispatch(logout()); // Dispatch the logout action
+    
   };
 
   return (
     <View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 20,
-        backgroundColor: 'black',
-      }}>
-      {user ? (
+      
+    >
+      {user && (
         <>
+          <Image
+            source={{uri: user.imageUri}}
+            style={{width: 100, height: 100, borderRadius: 50}}
+          />
           <Text>Name: {user.name}</Text>
           <Text>Email: {user.email}</Text>
-          {user.imageUri && (
-            <Image
-              source={{uri: user.imageUri}}
-              style={{width: 200, height: 200, resizeMode: 'contain'}}
-            />
-          )}
+          <Button title="Logout" onPress={handleLogout} />
         </>
-      ) : (
-        <Text>User information not available</Text>
       )}
-      <Button title="Logout" onPress={handleLogout} />
     </View>
   );
 };

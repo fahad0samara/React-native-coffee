@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const WelcomeScreen = ({navigation}) => {
+const Welcome = ({navigation}) => {
   return (
     <ImageBackground
       source={require('../image/wlcome.jpg')}
@@ -23,7 +23,7 @@ const WelcomeScreen = ({navigation}) => {
         </View>
         <TouchableOpacity
           style={styles.startButton}
-          onPress={() => navigation.navigate('TabNavigation')}>
+          onPress={() => navigation.navigate('Register')}>
           <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>
       </View>
@@ -77,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WelcomeScreen;
+export default Welcome;

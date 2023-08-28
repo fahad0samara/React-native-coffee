@@ -19,9 +19,11 @@ import {StyleSheet} from 'react-native';
 import {coffeeCategories} from './../data/data';
 import {coffeeData} from '../data/data';
 import {useState} from 'react';
+import { useSelector } from 'react-redux';
 
 const Home = ({navigation}) => {
   const [selectedCategory, setSelectedCategory] = useState('espresso');
+  const user = useSelector(state => state.auth.user);
 
   const handleCategoryPress = categoryId => {
     setSelectedCategory(categoryId);
@@ -67,10 +69,16 @@ const Home = ({navigation}) => {
       <SafeAreaView style={styles.safeAreaView}>
         <View style={styles.userContainer}>
           <View style={styles.userAvatarContainer}>
-            <Image source={require('../image/dd.png')} style={styles.avatar} />
+            <Image     source={{uri: user.imageUri}}
+         
+
+             
+             style={styles.avatar} />
           </View>
           <View style={styles.userDetailsContainer}>
-            <Text style={styles.greetingText}>Hi, John!</Text>
+            <Text style={styles.greetingText}>Hi, 
+              {user.name}
+            </Text>
             <Text style={styles.sloganText}>
               What would you like to drink today?
             </Text>

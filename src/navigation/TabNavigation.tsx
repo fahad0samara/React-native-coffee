@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const TabNavigation = ({route}) => {
-  const {user} = route.params;
+const TabNavigation = () => {
+
 
   return (
     <Tab.Navigator
@@ -48,7 +48,7 @@ const TabNavigation = ({route}) => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Favorite" component={Favorite} />
       <Tab.Screen name="Cart" component={Cart} />
-      <Tab.Screen name="Profile" component={Profile} initialParams={{user}} />
+      <Tab.Screen name="Profile" component={Profile}  />
     </Tab.Navigator>
   );
 };
