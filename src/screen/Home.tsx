@@ -19,7 +19,7 @@ import {StyleSheet} from 'react-native';
 import {coffeeCategories} from './../data/data';
 import {coffeeData} from '../data/data';
 import {useState} from 'react';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 const Home = ({navigation}) => {
   const [selectedCategory, setSelectedCategory] = useState('espresso');
@@ -69,14 +69,18 @@ const Home = ({navigation}) => {
       <SafeAreaView style={styles.safeAreaView}>
         <View style={styles.userContainer}>
           <View style={styles.userAvatarContainer}>
-            <Image     source={{uri: user.imageUri}}
-         
-
-             
-             style={styles.avatar} />
+            <Image
+              source={
+                user.imageUri
+                  ? {uri: user.imageUri}
+                  : require('../image/wlcome.jpg')
+              }
+              style={styles.avatar}
+            />
           </View>
           <View style={styles.userDetailsContainer}>
-            <Text style={styles.greetingText}>Hi, 
+            <Text style={styles.greetingText}>
+              Hi,
               {user.name}
             </Text>
             <Text style={styles.sloganText}>
@@ -120,7 +124,7 @@ const Home = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+
   },
   backgroundImage: {
     flexDirection: 'row',

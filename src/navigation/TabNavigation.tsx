@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -33,8 +32,6 @@ const styles = StyleSheet.create({
 });
 
 const TabNavigation = () => {
-
-
   return (
     <Tab.Navigator
       screenOptions={{
@@ -48,7 +45,7 @@ const TabNavigation = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Favorite" component={Favorite} />
       <Tab.Screen name="Cart" component={Cart} />
-      <Tab.Screen name="Profile" component={Profile}  />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 };

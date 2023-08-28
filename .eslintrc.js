@@ -1,4 +1,3 @@
-
 module.exports = {
   extends: [
     'eslint:recommended',
@@ -11,7 +10,6 @@ module.exports = {
 
   plugins: ['react', 'react-native', 'jest', 'prettier'],
 
-  
   env: {
     browser: true,
     es6: true,
@@ -29,7 +27,4 @@ module.exports = {
     'react/display-name': 0,
     'react/no-unescaped-entities': 0,
   },
-
 };
-
-
