@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 
@@ -20,27 +19,23 @@ const StackNavigation = () => {
         screenOptions={{
           contentStyle: {backgroundColor: 'white'},
         }}>
-          <Stack.Screen
-  name="Register
+        <Stack.Screen
+          name="Register
 "
-  options={{headerShown: false}}
-  component={Register
-}
-/>
+          options={{headerShown: false}}
+          component={Register}
+        />
 
         <Stack.Screen
           name="Login"
           options={{headerShown: false}}
-          component={Login
-
-}
+          component={Login}
         />
         <Stack.Screen
-  name="Home"
-  options={{headerShown: false}}
-  component={Home}
-/>
-
+          name="Home"
+          options={{headerShown: false}}
+          component={Home}
+        />
 
         <Stack.Screen
           name="TabNavigation"
@@ -64,5 +59,3 @@ const StackNavigation = () => {
 };
 
 export default StackNavigation;
-
-

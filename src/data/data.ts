@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-
 export const coffeeCategories = [
   {id: 'espresso', name: 'Espresso'},
   {id: 'cappuccino', name: 'Cappuccino'},

@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -220,4 +219,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home
+export default Home;

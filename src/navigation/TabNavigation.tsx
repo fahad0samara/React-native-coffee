@@ -1,8 +1,4 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable prettier/prettier */
-/* eslint-disable react/no-unstable-nested-components */
+
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -52,11 +48,7 @@ const TabNavigation = ({route}) => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Favorite" component={Favorite} />
       <Tab.Screen name="Cart" component={Cart} />
-      <Tab.Screen name="Profile" component={Profile}
-              initialParams={{ user }}
-      
-       />
-
+      <Tab.Screen name="Profile" component={Profile} initialParams={{user}} />
     </Tab.Navigator>
   );
 };

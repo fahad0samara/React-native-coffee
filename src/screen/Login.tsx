@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React, {useState} from 'react';
 import {View, TextInput, Button, Alert} from 'react-native';
 import SQLite from 'react-native-sqlite-2';
@@ -20,9 +19,7 @@ const LoginScreen = ({navigation}) => {
             if (user.role === 'admin') {
               navigation.navigate('AdminHome');
             } else {
-              navigation.navigate('TabNavigation',{user}
-);
-             
+              navigation.navigate('TabNavigation', {user});
             }
           } else {
             Alert.alert('Error', 'Invalid email or password');

@@ -1,8 +1,12 @@
-/* eslint-disable prettier/prettier */
 // SearchScreen.js
 
 import React from 'react';
-import {View, Text, TextInput, FlatList, TouchableOpacity,
+import {
+  View,
+  Text,
+  TextInput,
+  FlatList,
+  TouchableOpacity,
   StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -10,7 +14,6 @@ import {
   widthPercentageToDP,
   heightPercentageToDP,
 } from 'react-native-responsive-screen';
-
 
 const SearchScreen = ({navigation}) => {
   const data = [
@@ -27,31 +30,34 @@ const SearchScreen = ({navigation}) => {
   );
 
   return (
-<View style={styles.container}>
-  <View style={styles.header}>
-    <TouchableOpacity onPress=
-    {() => navigation.goBack()}
-     style={styles.backButton}>
-      <Icon name="arrow-left" size={20} color="#6b4226" />
-    </TouchableOpacity>
-    <View style={styles.searchBarContainer}>
-      <Icon name="search" size={20} color="#6b4226" style={styles.searchIcon} />
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Search for products..."
-        placeholderTextColor="#6b4226"
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}>
+          <Icon name="arrow-left" size={20} color="#6b4226" />
+        </TouchableOpacity>
+        <View style={styles.searchBarContainer}>
+          <Icon
+            name="search"
+            size={20}
+            color="#6b4226"
+            style={styles.searchIcon}
+          />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search for products..."
+            placeholderTextColor="#6b4226"
+          />
+        </View>
+      </View>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+        contentContainerStyle={styles.listContainer}
       />
     </View>
-  </View>
-  <FlatList
-    data={data}
-    renderItem={renderItem}
-    keyExtractor={item => item.id}
-    contentContainerStyle={styles.listContainer}
-  />
-</View>
-
-
   );
 };
 
@@ -103,6 +109,5 @@ const styles = StyleSheet.create({
     color: '#6b4226',
   },
 });
-
 
 export default SearchScreen;

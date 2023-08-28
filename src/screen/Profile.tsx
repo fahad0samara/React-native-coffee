@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React from 'react';
 import {View, Text, Image, Button} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,14 +16,13 @@ const ProfileScreen = ({route, navigation}) => {
 
   return (
     <View
-        style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 20,
-            backgroundColor:"black"
-        }}
-    >
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+        backgroundColor: 'black',
+      }}>
       {user ? (
         <>
           <Text>Name: {user.name}</Text>
@@ -43,6 +41,5 @@ const ProfileScreen = ({route, navigation}) => {
     </View>
   );
 };
-
 
 export default ProfileScreen;

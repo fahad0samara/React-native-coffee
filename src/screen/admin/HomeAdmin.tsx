@@ -1,13 +1,12 @@
-/* eslint-disable prettier/prettier */
-import { View, Text } from 'react-native'
-import React from 'react'
+import {View, Text} from 'react-native';
+import React from 'react';
 
 const HomeAdmin = () => {
   return (
     <View>
       <Text>HomeAdmin</Text>
     </View>
-  )
-}
+  );
+};
 
-export default HomeAdmin
+export default HomeAdmin;
