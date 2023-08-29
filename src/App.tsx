@@ -6,7 +6,7 @@ import {store, persistor} from './redux/store';
 import StackNavigation from './navigation/StackNavigation';
 
 import {PersistGate} from 'redux-persist/integration/react';
-import ThemedApp from './hooks/ThemeProvider';
+
 
 const App = () => {
   return (
@@ -14,7 +14,10 @@ const App = () => {
     <Provider store={store}>
 
       <PersistGate loading={null} persistor={persistor}>
-         <ThemedApp />
+        <StackNavigation />
+
+
+
       </PersistGate>
     </Provider>
   );

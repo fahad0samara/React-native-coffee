@@ -20,8 +20,9 @@ const Stack = createNativeStackNavigator();
 const StackNavigation = () => {
   const user = useSelector(state => state.auth.user);
   const role = useSelector(state => state.auth.role);
-  const isDarkMode = useDarkMode(); 
+
   return (
+     <NavigationContainer>
 
     <Stack.Navigator
         screenOptions={{
@@ -61,6 +62,7 @@ const StackNavigation = () => {
         )}
         {/* Other screens... */}
       </Stack.Navigator>
+    </NavigationContainer>
 
 
   );

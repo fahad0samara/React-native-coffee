@@ -1,41 +1,39 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import {useDispatch} from "react-redux";
-import {useSelector} from "react-redux";
-import {toggleDarkMode} from "../redux/darkModeSlice";
-import {RootState} from "../Redux/store";
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { TouchableOpacity, Text } from 'react-native';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleDarkMode } from '../redux/darkModeSlice';
+import { RootState } from '../Redux/store';
+import { View, Switch, StyleSheet } from 'react-native';
 
 const DarkModeToggle = () => {
   const isDarkMode = useSelector((state: RootState) => state.darkmode.darkmode);
   const dispatch = useDispatch();
 
   const handleToggle = () => {
-    //@ts-ignore
-    dispatch(toggleDarkMode(isDarkMode ? false : true));
+    dispatch(toggleDarkMode());
   };
 
   return (
-    <TouchableOpacity onPress={handleToggle}>
-      <Ionicons
-        name={isDarkMode ? "sunny-outline" : "moon-outline"}
-        size={30}
-        color={isDarkMode ? "white" : "black"}
+    <View style={styles.container}>
+      <Switch
+        value={isDarkMode}
+        onValueChange={handleToggle}
+        trackColor={{ false: '#767577', true: '#81b0ff' }}
+        thumbColor={isDarkMode ? '#f5dd4b' : '#f4f3f4'}
+        style={styles.switch}
       />
-      <Text
-        style={{
-          color: "red",
-          fontSize: 20,
-          fontWeight: "bold",
-        }}
-      >
-        ghh
-        {isDarkMode ? "Light Mode" : "Dark Mode"}
-      </Text>
-
-    </TouchableOpacity>
-  
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 10,
+  },
+  switch: {
+    transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }],
+  },
+});
 
 export default DarkModeToggle;

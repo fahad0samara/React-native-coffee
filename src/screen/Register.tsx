@@ -14,6 +14,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import SQLite from 'react-native-sqlite-2';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { useDarkMode } from '../hooks/useDarkMode';
 
 const db = SQLite.openDatabase('users.db');
 
@@ -22,6 +23,7 @@ const Register = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [imageUri, setImageUri] = useState(null);
+    const isDarkMode = useDarkMode();
 
   const handleRegistration = () => {
     if (!validateEmail(email)) {
@@ -91,6 +93,86 @@ const Register = ({navigation}) => {
     return emailRegex.test(email);
   };
 
+  const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    flexGrow: 1, // Allow content to grow and scroll
+    justifyContent: 'center',
+    
+    backgroundColor: isDarkMode ? 'black' : 'white',
+ 
+  },
+  textContainer: {
+    alignItems: 'center',
+    marginBottom: hp(2),
+         color: isDarkMode ? 'white' : 'black',
+  },
+  title: {
+    fontSize: wp(7),
+    color: 'black',
+    fontFamily: 'Helvetica-Bold',
+    marginBottom: hp('1%'),
+    color:'#955629',
+  },
+  subtitle: {
+    fontSize: wp(5),
+       color: isDarkMode ? 'white' : 'black',
+
+ 
+    textAlign: 'center',
+  },
+  uploadImage: {
+    alignItems: 'center',
+    marginTop: hp('3%'),
+  },
+  deleteImage: {
+    alignItems: 'center',
+    marginTop: hp('1%'),
+  },
+  deleteText: {
+    color: 'red',
+  },
+  input: {
+    borderWidth: 3,
+ borderColor: '#955629',
+    padding: hp(1.5),
+    borderRadius: 14,
+    marginBottom: hp(1),
+    marginTop:hp(1),
+    color: isDarkMode ? 'white' : 'black',
+
+    
+
+  },
+  image: {
+    width: wp(25),
+    height: wp(25),
+    resizeMode: 'cover',
+    borderRadius: wp(20),
+  },
+  uploadText: {
+     color: isDarkMode ? 'white' : 'black',
+    marginTop: hp('3%'),
+  },
+  registerButton: {
+    backgroundColor: '#955629',
+    padding: hp('2%'),
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: hp('3%'),
+  },
+  registerButtonText: {
+    color: 'white',
+    fontSize: wp('4%'),
+  },
+  loginLink: {
+    marginTop: hp('2%'),
+    textAlign: 'center',
+color: isDarkMode ? 'white' : 'black',
+    textDecorationLine: 'underline',
+  },
+});
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
     
@@ -128,6 +210,7 @@ const Register = ({navigation}) => {
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
+
       />
       <TextInput
         style={styles.input}
@@ -151,78 +234,6 @@ const Register = ({navigation}) => {
     </ScrollView>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    flexGrow: 1, // Allow content to grow and scroll
-    justifyContent: 'center',
- 
-  },
-  textContainer: {
-    alignItems: 'center',
-    marginBottom: hp(2),
-  },
-  title: {
-    fontSize: wp(7),
-    color: 'black',
-    fontFamily: 'Helvetica-Bold',
-    marginBottom: hp('1%'),
-    color:'#955629',
-  },
-  subtitle: {
-    fontSize: wp(5),
-    color: 'gray',
- 
-    textAlign: 'center',
-  },
-  uploadImage: {
-    alignItems: 'center',
-    marginTop: hp('3%'),
-  },
-  deleteImage: {
-    alignItems: 'center',
-    marginTop: hp('1%'),
-  },
-  deleteText: {
-    color: 'red',
-  },
-  input: {
-    borderWidth: 3,
- borderColor: '#955629',
-    padding: hp(1.5),
-    borderRadius: 14,
-    marginBottom: hp(1),
-    marginTop:hp(1)
-    
 
-  },
-  image: {
-    width: wp(25),
-    height: wp(25),
-    resizeMode: 'cover',
-    borderRadius: wp(20),
-  },
-  uploadText: {
-    color: 'blue',
-    marginTop: hp('3%'),
-  },
-  registerButton: {
-    backgroundColor: '#955629',
-    padding: hp('2%'),
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: hp('3%'),
-  },
-  registerButtonText: {
-    color: 'white',
-    fontSize: wp('4%'),
-  },
-  loginLink: {
-    marginTop: hp('2%'),
-    textAlign: 'center',
-    color: 'blue',
-    textDecorationLine: 'underline',
-  },
-});
 
 export default Register;

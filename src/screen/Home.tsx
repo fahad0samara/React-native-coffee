@@ -20,11 +20,12 @@ import {coffeeCategories} from './../data/data';
 import {coffeeData} from '../data/data';
 import {useState} from 'react';
 import {useSelector} from 'react-redux';
+import { useDarkMode } from '../hooks/useDarkMode';
 
 const Home = ({navigation}) => {
   const [selectedCategory, setSelectedCategory] = useState('espresso');
   const user = useSelector(state => state.auth.user);
-
+  const isDarkMode = useDarkMode();
   const handleCategoryPress = categoryId => {
     setSelectedCategory(categoryId);
   };
@@ -50,6 +51,123 @@ const Home = ({navigation}) => {
       <Text style={styles.coffeeDescription}>{item.description}</Text>
     </View>
   );
+
+  const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: isDarkMode ? 'black' : 'white',
+
+
+          
+
+
+  },
+  backgroundImage: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    height: heightPercentageToDP(9),
+    borderBottomLeftRadius: widthPercentageToDP(15),
+    borderBottomRightRadius: widthPercentageToDP(15),
+    backgroundColor: '#955629',
+  },
+  leftImage: {
+    height: widthPercentageToDP(15),
+    width: widthPercentageToDP(20),
+    marginLeft: widthPercentageToDP(5),
+  },
+  rightImage: {
+    height: widthPercentageToDP(15),
+    width: widthPercentageToDP(20),
+    marginRight: widthPercentageToDP(5),
+  },
+  safeAreaView: {
+    paddingHorizontal: widthPercentageToDP(5),
+    paddingTop: heightPercentageToDP(5),
+  },
+  userContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  userAvatarContainer: {
+    marginRight: 15,
+  },
+  userDetailsContainer: {},
+  avatar: {
+    height: widthPercentageToDP(10),
+    width: widthPercentageToDP(10),
+    borderRadius: widthPercentageToDP(5),
+  },
+  searchBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+    borderRadius: 20,
+    paddingHorizontal: 10,
+  },
+  searchIconContainer: {
+    padding: 10,
+    backgroundColor: '#f0f0f0',
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderColor: '#955629',
+  },
+  searchInput: {
+    flex: 1,
+    padding: 10,
+    fontSize: 16,
+    color: '#955629',
+  },
+  greetingText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#955629',
+  },
+  sloganText: {
+    fontSize: 16,
+         color: isDarkMode ? 'white' : 'black',
+         marginTop:4
+
+  },
+  categoryList: {
+    paddingHorizontal: widthPercentageToDP(4),
+    marginVertical: 20,
+  },
+  categoryItem: {
+    backgroundColor: '#955629',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  selectedCategoryItem: {
+    backgroundColor: '#6b4226', // Customize the selected category color
+  },
+  categoryName: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  coffeeList: {
+    paddingHorizontal: widthPercentageToDP(5),
+  },
+  coffeeItem: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#f2f2f2',
+    paddingVertical: 10,
+  },
+  coffeeName: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: '#955629',
+  },
+  coffeeDescription: {
+    color: '#955629',
+    marginTop: 5,
+  },
+});
 
   return (
     <View style={styles.container}>
@@ -121,114 +239,6 @@ const Home = ({navigation}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
 
-  },
-  backgroundImage: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    height: heightPercentageToDP(9),
-    borderBottomLeftRadius: widthPercentageToDP(15),
-    borderBottomRightRadius: widthPercentageToDP(15),
-    backgroundColor: '#955629',
-  },
-  leftImage: {
-    height: widthPercentageToDP(15),
-    width: widthPercentageToDP(20),
-    marginLeft: widthPercentageToDP(5),
-  },
-  rightImage: {
-    height: widthPercentageToDP(15),
-    width: widthPercentageToDP(20),
-    marginRight: widthPercentageToDP(5),
-  },
-  safeAreaView: {
-    paddingHorizontal: widthPercentageToDP(5),
-    paddingTop: heightPercentageToDP(5),
-  },
-  userContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  userAvatarContainer: {
-    marginRight: 15,
-  },
-  userDetailsContainer: {},
-  avatar: {
-    height: widthPercentageToDP(10),
-    width: widthPercentageToDP(10),
-    borderRadius: widthPercentageToDP(5),
-  },
-  searchBarContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-    borderRadius: 20,
-    paddingHorizontal: 10,
-  },
-  searchIconContainer: {
-    padding: 10,
-    backgroundColor: '#f0f0f0',
-    borderTopLeftRadius: 20,
-    borderBottomLeftRadius: 20,
-    borderColor: '#955629',
-  },
-  searchInput: {
-    flex: 1,
-    padding: 10,
-    fontSize: 16,
-    color: '#955629',
-  },
-  greetingText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#955629',
-  },
-  sloganText: {
-    fontSize: 16,
-    color: '#955629',
-  },
-  categoryList: {
-    paddingHorizontal: widthPercentageToDP(4),
-    marginVertical: 20,
-  },
-  categoryItem: {
-    backgroundColor: '#955629',
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-    borderRadius: 20,
-    marginRight: 10,
-  },
-  selectedCategoryItem: {
-    backgroundColor: '#6b4226', // Customize the selected category color
-  },
-  categoryName: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  coffeeList: {
-    paddingHorizontal: widthPercentageToDP(5),
-  },
-  coffeeItem: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#f2f2f2',
-    paddingVertical: 10,
-  },
-  coffeeName: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    color: '#955629',
-  },
-  coffeeDescription: {
-    color: '#955629',
-    marginTop: 5,
-  },
-});
 
 export default Home;
