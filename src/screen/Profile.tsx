@@ -23,6 +23,10 @@ const ProfileScreen = ({ navigation }) => {
     background: {
       flex: 1,
       resizeMode: 'cover',
+      justifyContent: 'center',
+     
+    
+      
     },
     contentContainer: {
       flex: 1,
@@ -97,9 +101,7 @@ const ProfileScreen = ({ navigation }) => {
     <View style={dynamicStyles.container}>
       <ImageBackground
         source={
-          user.imageUri
-            ? { uri: user.imageUri }
-            : require('../image/wlcome.jpg')
+         z require('../image/profile1.png')
         }
         style={dynamicStyles.background}
       >
