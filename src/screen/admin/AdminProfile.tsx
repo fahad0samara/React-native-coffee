@@ -7,7 +7,7 @@ import { useDarkMode } from '../../hooks/useDarkMode';
 import { logout } from '../../redux/authSlice';
 import DarkModeToggle from '../../hooks/DarkModeToggle';
 
-const ProfileScreen = ({ navigation }) => {
+const AdminProfile = ({ navigation }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
   const isDarkMode = useDarkMode();
@@ -148,4 +148,4 @@ const ProfileScreen = ({ navigation }) => {
   );
 };
 
-export default ProfileScreen;
+export default AdminProfile;

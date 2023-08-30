@@ -201,7 +201,7 @@ color: isDarkMode ? 'white' : 'black',
         <Text style={styles.title}>Create account</Text>
         <Text style={styles.subtitle}>
           Create an account so you can explore all 
-          the exciting features of our app!
+          the exciting features of our app
         </Text>
       </View>
             <TouchableOpacity onPress={handleImageSelection} style={styles.uploadImage}>

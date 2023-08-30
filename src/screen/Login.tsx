@@ -43,7 +43,7 @@ const LoginScreen = ({navigation}) => {
              dispatch(login({ user, role: user.role })); 
         
             if (user.role === 'admin') {
-              navigation.replace('AdminHome');
+              navigation.replace('AdminTabNavigation');
             }
             else{
               navigation.replace('TabNavigation');

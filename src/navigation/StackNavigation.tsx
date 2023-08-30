@@ -13,7 +13,9 @@ import Welcome from '../screen/Welcome';
 import Search from '../screen/Search';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { View } from 'react-native';
-import AdminHome from '../screen/admin/AdminHome';
+
+import AdminTabNavigation from './AdminTabNavigation';
+import AdminAddItems from '../screen/admin/AdminAddItems';
 
 
 const Stack = createNativeStackNavigator();
@@ -33,7 +35,14 @@ const StackNavigation = () => {
 
         {user ? ( // User is already registered
           role === 'admin' ? (
-            <Stack.Screen name="AdminHome" component={AdminHome} />
+            <>
+            <Stack.Screen name="AdminTabNavigation" component={AdminTabNavigation} />
+                 <Stack.Screen
+              name="AdminAddItems"
+              component={AdminAddItems}
+              options={{animationTypeForReplace: 'pop'}} // Skip animation when navigating from Welcome to Register
+            />
+            </>
           ) : (
             <Stack.Screen
              name="TabNavigation" component={TabNavigation}
@@ -48,6 +57,7 @@ const StackNavigation = () => {
               component={Welcome}
               options={{animationTypeForReplace: 'pop'}} // Skip animation when navigating from Welcome to Register
             />
+          
             <Stack.Screen
               name="Register"
               component={Register}
