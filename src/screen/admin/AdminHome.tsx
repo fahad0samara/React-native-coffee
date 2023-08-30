@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../redux/authSlice';
-import DarkModeToggle from '../hooks/DarkModeToggle';
-import { useDarkMode } from '../hooks/useDarkMode';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useDarkMode } from '../../hooks/useDarkMode';
+import { logout } from '../../redux/authSlice';
+import DarkModeToggle from '../../hooks/DarkModeToggle';
 
 const ProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -101,7 +102,7 @@ const ProfileScreen = ({ navigation }) => {
     <View style={dynamicStyles.container}>
       <ImageBackground
         source={
-          require('../image/profile1.png')
+          require('../../image/profile1.png')
         }
         style={dynamicStyles.background}
       >
@@ -120,7 +121,7 @@ const ProfileScreen = ({ navigation }) => {
             source={
               user.imageUri
                 ? { uri: user.imageUri }
-                : require('../image/wlcome.jpg')
+                : require('../../image/wlcome.jpg')
             }
             style={dynamicStyles.profileImage}
           />

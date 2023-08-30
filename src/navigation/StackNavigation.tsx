@@ -13,6 +13,7 @@ import Welcome from '../screen/Welcome';
 import Search from '../screen/Search';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { View } from 'react-native';
+import AdminHome from '../screen/admin/AdminHome';
 
 
 const Stack = createNativeStackNavigator();

@@ -40,13 +40,17 @@ const LoginScreen = ({navigation}) => {
         (_, {rows}) => {
           if (rows.length > 0) {
             const user = rows.item(0);
-            dispatch(login(user)); // Dispatch the login action with user object
-
+             dispatch(login({ user, role: user.role })); 
+        
             if (user.role === 'admin') {
-              navigation.navigate('AdminHome');
-            } else {
-              navigation.navigate('TabNavigation', {user});
+              navigation.replace('AdminHome');
             }
+            else{
+              navigation.replace('TabNavigation');
+            }
+            
+        
+         
           } else {
             Alert.alert('Error', 'Invalid email or password');
           }
