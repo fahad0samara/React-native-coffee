@@ -1,55 +1,75 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList, StyleSheet, Image} from 'react-native';
-import SQLite from 'react-native-sqlite-2';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 
-const db = SQLite.openDatabase('users.db');
-
-const HomeAdmin = () => {
+const HomeAdmin = ({ navigation }) => {
+  const isFocused = useIsFocused();
   const [coffeeItems, setCoffeeItems] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  const fetchCoffeeItems = async () => {
+    try {
+      const response = await fetch('http://192.168.88.164:3000/api/coffee-items');
+      const data = await response.json();
+      setCoffeeItems(data);
+
+      const uniqueCategories = [...new Set(data.map(item => item.categoryId))];
+      setCategories(uniqueCategories);
+    } catch (error) {
+      console.log('Error fetching coffee data:', error);
+    }
+  };
 
   useEffect(() => {
-    fetchCoffeeItems();
-  }, []);
+    if (isFocused) {
+      fetchCoffeeItems();
+    }
+  }, [isFocused]);
 
-  const fetchCoffeeItems = () => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'SELECT * FROM coffeeData',
-        [],
-        (_, {rows}) => {
-          const data = [];
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.coffeeItemContainer}
+      onPress={() => navigateToDetails(item)}>
+      <Image source={{ uri: item.imageUri }} style={styles.coffeeItemImage} />
+      <View style={styles.coffeeItemInfo}>
+        <Text style={styles.coffeeItemName}>{item.name}</Text>
+        <Text style={styles.coffeeItemDescription}>{item.description}</Text>
+        <Text style={styles.coffeeItemPrice}>Price: {item.price}</Text>
+      </View>
+    </TouchableOpacity>
+  );
 
-          for (let i = 0; i < rows.length; i++) {
-            data.push(rows.item(i));
-       
-          }
-          setCoffeeItems(data);
-          console.log('====================================');
-          console.log(data);
-          console.log('====================================');
-        },
-        (_, error) => {
-          console.log('Error fetching coffee data:', error);
-        },
-      );
-    });
-  };
+  const renderCategoryItem = ({ item }) => (
+    <TouchableOpacity
+      style={[
+        styles.categoryItem,
+        selectedCategory === item && styles.selectedCategoryItem,
+      ]}
+      onPress={() => setSelectedCategory(item)}>
+      <Text style={styles.categoryName}>{item}</Text>
+    </TouchableOpacity>
+  );
+
+  const filteredCoffeeItems = selectedCategory
+    ? coffeeItems.filter(item => item.categoryId === selectedCategory)
+    : coffeeItems;
 
   return (
     <View style={styles.container}>
-      <Text>HomeAdmin</Text>
       <FlatList
-        data={coffeeItems}
-        renderItem={({item}) => (
-          <View style={styles.coffeeItem}>
-            <Image source={{uri: item.imageUri}} style={styles.itemImage} />
-            <Text style={styles.itemName}>{item.name}</Text>
-            <Text style={styles.itemDescription}>{item.description}</Text>
-            <Text style={styles.itemPrice}>${item.price}</Text>
-            <Text style={styles.itemOrigin}>{item.origin}</Text>
-          </View>
-        )}
-        keyExtractor={item => item.id}
+        data={categories}
+        renderItem={renderCategoryItem}
+        keyExtractor={(item) => item}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.categoryList}
+      />
+      <FlatList
+        data={filteredCoffeeItems}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.listContainer}
       />
     </View>
   );
@@ -58,35 +78,67 @@ const HomeAdmin = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#f2f2f2',
   },
-  coffeeItem: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
+  categoryList: {
+    marginBottom: 16,
   },
-  itemImage: {
+  listContainer: {
+    paddingVertical: 16,
+    paddingHorizontal: 12,
+  },
+  coffeeItemContainer: {
+    flexDirection: 'row',
+    marginBottom: 16,
+    backgroundColor: 'white',
+    borderRadius: 8,
+    padding: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  coffeeItemImage: {
     width: 100,
     height: 100,
-    resizeMode: 'cover',
     borderRadius: 8,
-    marginBottom: 8,
   },
-  itemName: {
+  coffeeItemInfo: {
+    marginLeft: 12,
+    flex: 1,
+  },
+  coffeeItemName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#333',
   },
-  itemDescription: {
-    marginTop: 4,
-    color: '#555',
+  coffeeItemDescription: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 6,
   },
-  itemPrice: {
-    color: '#955629',
+  coffeeItemPrice: {
+    fontSize: 16,
+    color: '#e74c3c',
   },
-  itemOrigin: {
-    marginTop: 4,
-    color: '#555',
+  categoryItem: {
+    backgroundColor: '#3498db',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    marginRight: 10,
+    height: 40,
+    justifyContent: 'center',
+  },
+  selectedCategoryItem: {
+    backgroundColor: '#e74c3c',
+  },
+  categoryName: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
   },
 });
 

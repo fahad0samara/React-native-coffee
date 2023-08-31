@@ -22,7 +22,6 @@ import {
 } from 'react-native-responsive-screen';
 import {useDarkMode} from '../../hooks/useDarkMode';
 
-const db = SQLite.openDatabase('users.db');
 
 const AddCoffeeScreen = ({navigation}) => {
   const isDarkMode = useDarkMode();
@@ -37,48 +36,49 @@ const AddCoffeeScreen = ({navigation}) => {
   const [origin, setOrigin] = useState('');
   const [roastLevel, setRoastLevel] = useState('');
 
-  const handleAddCoffee = () => {
-    const coffeeId = Math.random().toString(36).substr(2, 9);
 
-    db.transaction(tx => {
-      tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS coffeeData (id TEXT PRIMARY KEY, categoryId TEXT, name TEXT, description TEXT, imageUri TEXT, price TEXT, ingredients TEXT, servingSize TEXT, caffeineContent TEXT, origin TEXT, roastLevel TEXT)',
-        [],
-      );
-
-      tx.executeSql(
-        'INSERT INTO coffeeData (id, categoryId, name, description, imageUri, price, ingredients, servingSize, caffeineContent, origin, roastLevel) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [
-          coffeeId,
-          selectedCategory,
-          name,
-          description,
-          imageUri,
-          price,
-          ingredients,
-          servingSize,
-          caffeineContent,
-          origin,
-          roastLevel,
-        ],
-        (_, results) => {
-          if (results.rowsAffected > 0) {
-            Alert.alert('Success', 'Coffee item added successfully');
-            navigation.goBack();
-            
-         
-          } else {
-            Alert.alert('Error', 'Failed to add coffee item');
-          }
-        },
-        (_, error) => {
-          Alert.alert('Error', 'An error occurred while adding coffee item');
-          console.log('====================================');
-          console.log(error);
-          console.log('====================================');
-        },
-      );
+  const handleAddCoffee = async () => {
+    // Create a FormData object for multipart/form-data
+    const formData = new FormData();
+    formData.append('image', {
+      uri: imageUri,
+      name: 'coffeeImage.jpg',
+      type: 'image/jpeg',
     });
+
+    // Add other fields to the formData
+    formData.append('id', Math.random().toString(36).substr(2, 9));
+    formData.append('categoryId', selectedCategory);
+    formData.append('name', name);
+    formData.append('description', description);
+    formData.append('price', price);
+    formData.append('ingredients', ingredients);
+    formData.append('servingSize', servingSize);
+    formData.append('caffeineContent', caffeineContent);
+    formData.append('origin', origin);
+    formData.append('roastLevel', roastLevel);
+
+    try {
+      const response = await fetch('http://192.168.88.164:3000/api/add-coffee', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (response.status === 200) {
+        Alert.alert('Success', 'Coffee item added successfully');
+       navigation.navigate('HomeAdmin');
+      
+      } else {
+        Alert.alert('Error', 'Failed to add coffee item');
+      }
+    } catch (error) {
+      console.error('Error adding coffee item:', error);
+      Alert.alert('Error', 'An error occurred while adding coffee item');
+    }
   };
 
   const handleImageSelection = () => {
