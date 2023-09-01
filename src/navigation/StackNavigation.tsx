@@ -17,6 +17,7 @@ import {View} from 'react-native';
 import AdminTabNavigation from './AdminTabNavigation';
 import AdminAddItems from '../screen/admin/AdminAddItems';
 import DetailsAdmin from '../screen/admin/DetailsAdmin';
+import Edit from '../screen/admin/detailScreen/Edit';
 
 const Stack = createNativeStackNavigator();
 
@@ -44,6 +45,7 @@ const StackNavigation = () => {
                 options={{animationTypeForReplace: 'pop'}} // Skip animation when navigating from Welcome to Register
               />
               <Stack.Screen name="DetailsAdmin" component={DetailsAdmin} />
+                <Stack.Screen name="Edit" component={Edit} />
             </>
           ) : (
             <>

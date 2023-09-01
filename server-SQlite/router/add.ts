@@ -111,4 +111,91 @@ router.get('/coffee-items', (req: Request, res: Response) => {
   });
 });
 
+// Define a route to delete a coffee item by ID
+router.delete('/delete-coffee/:id', (req: Request, res: Response) => {
+  const {id} = req.params;
+
+  // Create an SQL DELETE statement to delete the coffee item by its ID
+  const sql = 'DELETE FROM coffeeData WHERE id = ?';
+
+  // Run the SQL query to delete the item
+  db.run(sql, [id], (error: Error | null) => {
+    if (error) {
+      console.error('Error deleting coffee item:', error);
+      res.status(500).json({error: 'Internal server error'});
+    } else {
+      res.status(200).json({message: 'Successfully deleted coffee item'});
+    }
+  });
+});
+router.put(
+  '/update-coffee/:id',
+  upload.single('image'),
+  async (req: Request, res: Response) => {
+    const {id} = req.params;
+    const updatedCoffeeItem = req.body;
+    let imageUri = null;
+
+    // Check if a new image is provided
+    if (req.file) {
+      const uploadOptions = {
+        folder: 'coffee-images', // Specify the folder in Cloudinary
+        public_id: `coffee-${Date.now()}`, // Specify the public ID for the image
+        overwrite: true, // Overwrite existing image if necessary
+      };
+
+      // Upload the new image to Cloudinary
+      const result = await cloudinary.uploader
+        .upload_stream(uploadOptions, async (error: any, result: any) => {
+          if (error) {
+            console.error('Error uploading image to Cloudinary:', error);
+            res.status(500).json({error: 'Internal server error'});
+          } else {
+            imageUri = result.secure_url;
+            updatedCoffeeItem.imageUri = imageUri; // Update the image URI in the coffee item data
+
+            // Continue with updating data in the database
+            // ...
+          }
+        })
+        .end(req.file.buffer);
+    }
+
+    // Update the data in the database, including the imageUri
+    const sql = `
+    UPDATE coffeeData
+    SET categoryId = ?, name = ?, description = ?, imageUri = ?, 
+        price = ?, ingredients = ?, servingSize = ?, caffeineContent = ?, 
+        origin = ?, roastLevel = ?
+    WHERE id = ?
+  `;
+
+    const values = [
+      updatedCoffeeItem.categoryId,
+      updatedCoffeeItem.name,
+      updatedCoffeeItem.description,
+      updatedCoffeeItem.imageUri, // Always update the imageUri
+      updatedCoffeeItem.price,
+      updatedCoffeeItem.ingredients,
+      updatedCoffeeItem.servingSize,
+      updatedCoffeeItem.caffeineContent,
+      updatedCoffeeItem.origin,
+      updatedCoffeeItem.roastLevel,
+      id, // Coffee item ID to identify the item to update
+    ];
+
+    db.run(sql, values, dbError => {
+      if (dbError) {
+        console.error('Error updating coffee item:', dbError);
+        res.status(500).json({error: 'Internal server error'});
+      } else {
+        res.status(200).json({message: 'Successfully updated coffee item'});
+      }
+    });
+  },
+);
+
+
+
+
 export default router;

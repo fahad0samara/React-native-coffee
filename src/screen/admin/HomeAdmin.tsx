@@ -87,7 +87,7 @@ const HomeAdmin = ({navigation}) => {
     },
     backgroundImage: {
       width: '100%',
-      height: heightPercentageToDP(8),
+      height: heightPercentageToDP(9),
 
       borderBottomLeftRadius: widthPercentageToDP(50),
       borderBottomRightRadius: widthPercentageToDP(50),
