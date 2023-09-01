@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { useDarkMode } from '../../hooks/useDarkMode';
+import { widthPercentageToDP, heightPercentageToDP } from 'react-native-responsive-screen';
 
 const HomeAdmin = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [coffeeItems, setCoffeeItems] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const isDarkMode = useDarkMode();
 
   const fetchCoffeeItems = async () => {
     try {
@@ -27,16 +31,20 @@ const HomeAdmin = ({ navigation }) => {
     }
   }, [isFocused]);
 
+  const navigateToDetails = (item) => {
+    // Add navigation logic to navigate to the details screen
+  };
+
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.coffeeItemContainer}
-      onPress={() => navigateToDetails(item)}>
-      <Image source={{ uri: item.imageUri }} style={styles.coffeeItemImage} />
-      <View style={styles.coffeeItemInfo}>
-        <Text style={styles.coffeeItemName}>{item.name}</Text>
-        <Text style={styles.coffeeItemDescription}>{item.description}</Text>
-        <Text style={styles.coffeeItemPrice}>Price: {item.price}</Text>
+    <TouchableOpacity style={styles.coffeeItem} onPress={() => navigateToDetails(item)}>
+      <Image source={{ uri: item.imageUri }} style={styles.itemImage} />
+      <View style={styles.itemOverlay}>
+        <Text style={styles.itemName}>{item.name}</Text>
+        <Text style={styles.itemPrice}>{item.price}</Text>
       </View>
+      <TouchableOpacity style={styles.itemIconContainer}>
+        <Icon name="arrow-right" size={20} color="#fff" />
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 
@@ -55,91 +63,147 @@ const HomeAdmin = ({ navigation }) => {
     ? coffeeItems.filter(item => item.categoryId === selectedCategory)
     : coffeeItems;
 
+
+    const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: isDarkMode ? 'black' : 'white',
+  },
+  backgroundImage: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    height: heightPercentageToDP(9),
+    borderBottomLeftRadius: widthPercentageToDP(15),
+    borderBottomRightRadius: widthPercentageToDP(15),
+    backgroundColor: '#955629',
+  },
+  leftImage: {
+    height: widthPercentageToDP(15),
+    width: widthPercentageToDP(20),
+    marginLeft: widthPercentageToDP(5),
+  },
+  rightImage: {
+    height: widthPercentageToDP(15),
+    width: widthPercentageToDP(20),
+    marginRight: widthPercentageToDP(5),
+  },
+  safeAreaView: {
+    paddingHorizontal: widthPercentageToDP(5),
+    paddingTop: heightPercentageToDP(5),
+  },
+  coffeeItem: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 8,
+    marginBottom: 16,
+    elevation: 3,
+    overflow: 'hidden', // Clip child elements within the item
+  },
+  itemImage: {
+    width: '100%',
+    height:heightPercentageToDP(18),
+    resizeMode: 'cover',
+
+
+  },
+  itemOverlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.4)', // Background overlay color
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5,
+  },
+  itemName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white', 
+
+
+
+
+  },
+  itemPrice: {
+    fontSize: 16,
+    color: 'white', 
+    marginBottom :widthPercentageToDP(-7)
+    
+  },
+  itemIconContainer: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+  backgroundColor: '#955629',
+
+
+    padding: 8,
+    borderRadius: 20,
+
+
+
+  },
+  categoryList: {
+    paddingHorizontal: widthPercentageToDP(4),
+    marginVertical: 20,
+  },
+  categoryItem: {
+    backgroundColor: '#955629',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  selectedCategoryItem: {
+    backgroundColor: '#6b4226',
+  },
+  categoryName: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+});
+
   return (
     <View style={styles.container}>
-      <FlatList
-        data={categories}
-        renderItem={renderCategoryItem}
-        keyExtractor={(item) => item}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.categoryList}
-      />
-      <FlatList
-        data={filteredCoffeeItems}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContainer}
-      />
+      <StatusBar />
+      <View style={styles.backgroundImage}>
+        <Image
+          source={require('../../image/dd.png')}
+          style={styles.leftImage}
+          resizeMode="cover"
+        />
+        <Image
+          source={require('../../image/dd.png')}
+          style={styles.rightImage}
+          resizeMode="cover"
+        />
+      </View>
+      <SafeAreaView style={styles.safeAreaView}>
+        <FlatList
+          data={categories}
+          renderItem={renderCategoryItem}
+          keyExtractor={(item) => item}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.categoryList}
+        />
+        <FlatList
+          data={filteredCoffeeItems}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.coffeeList}
+        />
+      </SafeAreaView>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f2f2f2',
-  },
-  categoryList: {
-    marginBottom: 16,
-  },
-  listContainer: {
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-  },
-  coffeeItemContainer: {
-    flexDirection: 'row',
-    marginBottom: 16,
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  coffeeItemImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 8,
-  },
-  coffeeItemInfo: {
-    marginLeft: 12,
-    flex: 1,
-  },
-  coffeeItemName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  coffeeItemDescription: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 6,
-  },
-  coffeeItemPrice: {
-    fontSize: 16,
-    color: '#e74c3c',
-  },
-  categoryItem: {
-    backgroundColor: '#3498db',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    marginRight: 10,
-    height: 40,
-    justifyContent: 'center',
-  },
-  selectedCategoryItem: {
-    backgroundColor: '#e74c3c',
-  },
-  categoryName: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: 'white',
-    textAlign: 'center',
-  },
-});
+
 
 export default HomeAdmin;
