@@ -86,25 +86,15 @@ const HomeAdmin = ({navigation}) => {
       backgroundColor: isDarkMode ? 'black' : 'white',
     },
     backgroundImage: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
       width: '100%',
-      height: heightPercentageToDP(9),
-      borderBottomLeftRadius: widthPercentageToDP(15),
-      borderBottomRightRadius: widthPercentageToDP(15),
+      height: heightPercentageToDP(8),
+
+      borderBottomLeftRadius: widthPercentageToDP(50),
+      borderBottomRightRadius: widthPercentageToDP(50),
       backgroundColor: '#955629',
+
     },
-    leftImage: {
-      height: widthPercentageToDP(15),
-      width: widthPercentageToDP(20),
-      marginLeft: widthPercentageToDP(5),
-    },
-    rightImage: {
-      height: widthPercentageToDP(15),
-      width: widthPercentageToDP(20),
-      marginRight: widthPercentageToDP(5),
-    },
+
     safeAreaView: {
       paddingHorizontal: widthPercentageToDP(5),
       paddingTop: heightPercentageToDP(5),
@@ -156,6 +146,10 @@ const HomeAdmin = ({navigation}) => {
     categoryList: {
       paddingHorizontal: widthPercentageToDP(4),
       marginVertical: 20,
+  
+
+            
+       
     },
     categoryItem: {
       backgroundColor: '#955629',
@@ -172,22 +166,18 @@ const HomeAdmin = ({navigation}) => {
       fontWeight: 'bold',
       fontSize: 16,
     },
+    coffeeList: {
+      paddingBottom: widthPercentageToDP(40),
+      marginTop:-widthPercentageToDP (1) ,
+    },
   });
 
   return (
     <View style={styles.container}>
       <StatusBar />
       <View style={styles.backgroundImage}>
-        <Image
-          source={require('../../image/dd.png')}
-          style={styles.leftImage}
-          resizeMode="cover"
-        />
-        <Image
-          source={require('../../image/dd.png')}
-          style={styles.rightImage}
-          resizeMode="cover"
-        />
+    
+     
       </View>
       <SafeAreaView style={styles.safeAreaView}>
         <FlatList
@@ -205,7 +195,11 @@ const HomeAdmin = ({navigation}) => {
           contentContainerStyle={styles.coffeeList}
           scrollEnabled={true}
           showsVerticalScrollIndicator={false}
+          // marginbottm
+
           
+       
+
 
 
 
