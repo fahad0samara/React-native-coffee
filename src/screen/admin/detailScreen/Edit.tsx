@@ -77,40 +77,53 @@ const styles = StyleSheet.create({
     });
   };
 const handleSave = () => {
-  // Include the updated image URI in the edited item
-  const updatedCoffeeItem = { ...editedItem, imageUri };
+  // Check if editedItem is defined and has the necessary properties
+  if (editedItem && editedItem.imageUri) {
+    // Include the updated image URI in the edited item
+    const updatedCoffeeItem = { ...editedItem, imageUri };
 
-  // Send a PUT or PATCH request to update the coffee item on the server
-  axios
-    .put(`http://192.168.88.164:3000/api/update-coffee/${editedItem.id}`, updatedCoffeeItem) // Use updatedCoffeeItem instead of editedItem
-    .then(response => {
-      // Handle the success response here, e.g., show a confirmation message
-      Alert.alert(
-        'Success',
-        'Coffee item updated successfully!',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              // Navigate back to the coffee detail screen
-              navigation.goBack();
+    // Send a PUT or PATCH request to update the coffee item on the server
+    axios
+      .put(`http://192.168.88.142:3000/api/update-coffee/${editedItem.id}`, updatedCoffeeItem)
+      .then(response => {
+        // Handle the success response here, e.g., show a confirmation message
+        Alert.alert(
+          'Success',
+          'Coffee item updated successfully!',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                // Navigate back to the coffee detail screen and pass the updated item as a parameter
+                navigation.navigate('DetailsAdmin', { item: updatedCoffeeItem });
+              },
             },
-          },
-        ],
-        { cancelable: false }
-      );
-    })
-    .catch(error => {
-      // Handle errors, e.g., show an error message
-      console.error('Error updating coffee item:', error);
-      Alert.alert(
-        'Error',
-        'An error occurred while updating the coffee item.',
-        [{ text: 'OK', onPress: () => {} }],
-        { cancelable: false }
-      );
-    });
+          ],
+          { cancelable: false }
+        );
+      })
+      .catch(error => {
+        // Handle errors, e.g., show an error message
+        console.error('Error updating coffee item:', error);
+        Alert.alert(
+          'Error',
+          'An error occurred while updating the coffee item.',
+          [{ text: 'OK', onPress: () => {} }],
+          { cancelable: false }
+        );
+      });
+  } else {
+    // Handle the case where editedItem is undefined or lacks the required properties
+    console.error('Invalid editedItem:', editedItem);
+    Alert.alert(
+      'Error',
+      'Invalid editedItem. Please check the data and try again.',
+      [{ text: 'OK', onPress: () => {} }],
+      { cancelable: false }
+    );
+  }
 };
+
 
 
 

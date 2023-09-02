@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useDarkMode } from '../../hooks/useDarkMode';
@@ -7,11 +7,16 @@ import axios from 'axios';
 
 const CoffeeDetailScreen = ({ route, navigation }) => {
   const { item } = route.params;
-  console.log('====================================');
-  console.log(item);
-  console.log('====================================');
   const isDarkMode = useDarkMode();
- 
+  const [coffeeItem, setCoffeeItem] = useState(item);
+ useEffect(() => {
+    // Check if the route params include an updated item
+    if (route.params && route.params.item) {
+      // Update the state with the updated data
+      setCoffeeItem(route.params.item);
+    }
+  }, [route.params]);
+
 
   const styles = StyleSheet.create({
     container: {
@@ -114,12 +119,11 @@ const CoffeeDetailScreen = ({ route, navigation }) => {
           onPress: () => {
             // Send a DELETE request to your server to delete the coffee item
             axios
-              .delete(`http://192.168.88.164:3000/api/delete-coffee/${item.id}`)
+              .delete(`http://192.168.88.142:3000/api/delete-coffee/${item.id}`)
               .then(response => {
                 // Handle the success response here, e.g., show a confirmation message
-            
-             
-                  setDeletionMessage('');
+
+          
                   navigation.navigate('HomeAdmin');
                
               })

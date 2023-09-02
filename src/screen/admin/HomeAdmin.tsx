@@ -27,7 +27,7 @@ const HomeAdmin = ({navigation}) => {
   const fetchCoffeeItems = async () => {
     try {
       const response = await fetch(
-        'http://192.168.88.164:3000/api/coffee-items',
+        'http://192.168.88.142:3000/api/coffee-items',
       );
       const data = await response.json();
       setCoffeeItems(data);

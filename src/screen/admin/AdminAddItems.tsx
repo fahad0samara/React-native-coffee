@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import SQLite from 'react-native-sqlite-2';
 import {coffeeCategories} from '../../data/data';
@@ -35,10 +36,12 @@ const AddCoffeeScreen = ({navigation}) => {
   const [caffeineContent, setCaffeineContent] = useState('');
   const [origin, setOrigin] = useState('');
   const [roastLevel, setRoastLevel] = useState('');
+    const [loading, setLoading] = useState(false);
 
 
   const handleAddCoffee = async () => {
     // Create a FormData object for multipart/form-data
+     setLoading(true);
     const formData = new FormData();
     formData.append('image', {
       uri: imageUri,
@@ -59,7 +62,7 @@ const AddCoffeeScreen = ({navigation}) => {
     formData.append('roastLevel', roastLevel);
 
     try {
-      const response = await fetch('http://192.168.88.164:3000/api/add-coffee', {
+      const response = await fetch('http://192.168.88.142:3000/api/add-coffee', {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -279,9 +282,17 @@ const AddCoffeeScreen = ({navigation}) => {
             title="Add Coffee"
             color="#955629"
             onPress={handleAddCoffee}
+            disabled={loading}
           />
         </View>
       </ScrollView>
+         {loading && (
+        <ActivityIndicator
+          size="large"
+          color="#955629"
+          style={{ marginTop: 16 }}
+        />
+      )}
     </KeyboardAvoidingView>
   );
 };
