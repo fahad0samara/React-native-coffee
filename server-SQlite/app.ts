@@ -3,6 +3,9 @@ const app = express();
 import cors from 'cors';
 
 import coffee from './router/add';
+import auth from './router/auth'
+
+
 
 app.set('port', process.env.PORT || 3000);
 app.use(cors()); // enable CORS
@@ -15,6 +18,7 @@ app.get('/', (req, res, next) => {
 });
 
 app.use('/api', coffee);
+app.use('/api', auth);
 
 app.listen(app.get('port'), () => {
   console.info(`Server listen on port ${app.get('port')}`);

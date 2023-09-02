@@ -15,6 +15,7 @@ import SQLite from 'react-native-sqlite-2';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useDarkMode } from '../hooks/useDarkMode';
+import axios from 'axios';
 
 const db = SQLite.openDatabase('users.db');
 
@@ -22,51 +23,45 @@ const Register = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [imageUri, setImageUri] = useState(null);
+  const [profileImage, setprofileImage] = useState(null);
     const isDarkMode = useDarkMode();
 
-  const handleRegistration = () => {
-    if (!validateEmail(email)) {
-      Alert.alert('Error', 'Please enter a valid email address');
-      return;
+const handleRegister = () => {
+    // Create a FormData object for multipart/form-data
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('password', password);
+
+    if (profileImage) {
+      formData.append('profile_image', {
+        uri: profileImage.uri,
+        name: 'profileImage.jpg',
+        type: 'image/jpeg',
+      });
     }
 
-    if (password.length < 6) {
-      Alert.alert('Error', 'Password should be at least 6 characters');
-      return;
-    }
-
-    db.transaction(tx => {
-      tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT, name TEXT, imageUri TEXT, role TEXT)',
-        [],
-        () => {
-          tx.executeSql(
-            'SELECT * FROM users WHERE email = ?',
-            [email],
-            (_, {rows}) => {
-              if (rows.length > 0) {
-                Alert.alert('Error', 'User already exists');
-              } else {
-                const values = [email, password, name, imageUri || '', 'user'];
-                tx.executeSql(
-                  'INSERT INTO users (email, password, name, imageUri, role) VALUES (?, ?, ?, ?, ?)',
-                  values,
-                  (_, {rowsAffected}) => {
-                    if (rowsAffected > 0) {
-                      console.log('User registered successfully');
-                      navigation.navigate('Login');
-                    } else {
-                      console.log('Registration failed');
-                    }
-                  },
-                );
-              }
+    axios
+      .post('http://192.168.88.142:3000/api/register', formData)
+      .then(response => {
+        if (response.status === 201) {
+          Alert.alert('Success', 'User registered successfully', [
+            {
+              text: 'OK',
+              onPress: () => {
+                // Navigate to the login screen or any other screen as needed
+                navigation.navigate('Login');
+              },
             },
-          );
-        },
-      );
-    });
+          ]);
+        } else {
+          Alert.alert('Error', 'Failed to register user');
+        }
+      })
+      .catch(error => {
+        console.error('Error registering user:', error);
+        Alert.alert('Error', 'An error occurred while registering user');
+      });
   };
 
   const handleImageSelection = () => {
@@ -83,7 +78,7 @@ const Register = ({navigation}) => {
       } else if (response.assets && response.assets.length > 0) {
         const selectedImage = response.assets[0];
         console.log('Selected image:', selectedImage.uri);
-        setImageUri(selectedImage.uri);
+        setprofileImage(selectedImage.uri);
       }
     });
   };
@@ -184,18 +179,18 @@ color: isDarkMode ? 'white' : 'black',
         </Text>
       </View>
             <TouchableOpacity onPress={handleImageSelection} style={styles.uploadImage}>
-        {imageUri ? (
-          <Image source={{ uri: imageUri }} style={styles.image} />
+        {profileImage ? (
+          <Image source={{ uri: profileImage }} style={styles.image} />
         ) : (
           <Ionicons name="person-circle-outline" size={wp(30)} color="#955629" />
          
         )}
         <Text style={styles.uploadText}>
-          {imageUri ? 'Change Image' : 'Upload Your Image Here'}
+          {profileImage ? 'Change Image' : 'Upload Your Image Here'}
         </Text>
       </TouchableOpacity>
-      {imageUri ? (
-        <TouchableOpacity  onPress={() => setImageUri(null)}style={styles.deleteImage}>
+      {profileImage ? (
+        <TouchableOpacity  onPress={() => setprofileImage(null)}style={styles.deleteImage}>
           <Text style={styles.deleteText}>Delete Image</Text>
         </TouchableOpacity>
       ) : null}
@@ -224,7 +219,7 @@ color: isDarkMode ? 'white' : 'black',
   
       <TouchableOpacity
         style={styles.registerButton}
-        onPress={handleRegistration}
+        onPress={handleRegister}
       >
         <Text style={styles.registerButtonText}>Register</Text>
       </TouchableOpacity>
