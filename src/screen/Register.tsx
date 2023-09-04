@@ -25,8 +25,17 @@ const Register = ({navigation}) => {
   const [name, setName] = useState('');
   const [profileImage, setprofileImage] = useState(null);
     const isDarkMode = useDarkMode();
+const handleRegister = async () => {
+  if (!name) {
+    Alert.alert('Error', 'Please enter your name');
+    return;
+  }
+  if (!email) {
+    Alert.alert('Error', 'Please enter your email');
+    return;
+  }
 
-const handleRegister = () => {
+  try {
     // Create a FormData object for multipart/form-data
     const formData = new FormData();
     formData.append('name', name);
@@ -41,28 +50,31 @@ const handleRegister = () => {
       });
     }
 
-    axios
-      .post('http://192.168.88.142:3000/api/register', formData)
-      .then(response => {
-        if (response.status === 201) {
-          Alert.alert('Success', 'User registered successfully', [
-            {
-              text: 'OK',
-              onPress: () => {
-                // Navigate to the login screen or any other screen as needed
-                navigation.navigate('Login');
-              },
-            },
-          ]);
-        } else {
-          Alert.alert('Error', 'Failed to register user');
-        }
-      })
-      .catch(error => {
-        console.error('Error registering user:', error);
-        Alert.alert('Error', 'An error occurred while registering user');
-      });
-  };
+    console.log('Registering user with name, email, password, and profile image:', name, email, password, profileImage);
+
+    const response = await fetch('http://192.168.88.171:3000/auth/register', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    const data = await response.json();
+    console.log('Server response:', data);
+
+    if (data.success) {
+      Alert.alert('Success', 'User registered successfully');
+      navigation.navigate('Login');
+    } else {
+      Alert.alert('Error', 'An error occurred while registering user');
+    }
+  } catch (error) {
+    console.log(error);
+    Alert.alert('Error', 'An error occurred while registering user');
+  }
+};
+
 
   const handleImageSelection = () => {
     const options = {

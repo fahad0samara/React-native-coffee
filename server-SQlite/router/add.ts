@@ -196,6 +196,9 @@ router.put(
 );
 
 
+router.get('/api', (req, res, next) => {
+  res.send('<h1>Hello world<h1>');
+});
 
 
 export default router;

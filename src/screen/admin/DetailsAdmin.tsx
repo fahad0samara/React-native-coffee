@@ -119,7 +119,7 @@ const CoffeeDetailScreen = ({ route, navigation }) => {
           onPress: () => {
             // Send a DELETE request to your server to delete the coffee item
             axios
-              .delete(`http://192.168.88.142:3000/api/delete-coffee/${item.id}`)
+              .delete(`http://192.168.88.171:3000/api/delete-coffee/${item.id}`)
               .then(response => {
                 // Handle the success response here, e.g., show a confirmation message
 

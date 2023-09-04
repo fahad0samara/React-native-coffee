@@ -3,7 +3,8 @@ const app = express();
 import cors from 'cors';
 
 import coffee from './router/add';
-import auth from './router/auth'
+import auth from './router/auth';
+
 
 
 
@@ -18,7 +19,7 @@ app.get('/', (req, res, next) => {
 });
 
 app.use('/api', coffee);
-app.use('/api', auth);
+app.use('/auth', auth);
 
 app.listen(app.get('port'), () => {
   console.info(`Server listen on port ${app.get('port')}`);
