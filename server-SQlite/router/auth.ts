@@ -154,10 +154,6 @@ router.post('/login', async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
-
-    // If authentication is successful, you can generate a token here and send it as a response
-    // For example, using a JWT token
-    // Generate a JWT token for authentication
     const token = jwt.sign(
       { userId: user.id, userEmail: user.email, userRole: user.role },
       "awafdasfdf",
@@ -178,6 +174,66 @@ router.post('/login', async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+// Fetch all users
+router.get('/users', async (req, res) => {
+  try {
+    const users: User[] = await getUsers();
+    return res.status(200).json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+// Function to fetch all users from the database
+async function getUsers(): Promise<User[]> {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM users', (err, rows: User[]) => { // Specify the type here
+      if (err) {
+        return reject(err);
+      }
+      return resolve(rows);
+    });
+  });
+}
+
+router.delete('/delete/:id', async (req: Request, res: Response) => {
+  const userId = req.params.id; // Get the user ID from the URL parameter
+
+  try {
+    // Delete the user from the database based on their ID
+    await deleteUserById(userId);
+
+    return res.status(204).send(); // Send a success response with no content
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    return res.status(500).json({error: 'Internal server error'});
+  }
+});
+
+// Function to delete a user by ID from the database
+async function deleteUserById(id: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    db.run('DELETE FROM users WHERE id = ?', [id], err => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve();
+    });
+  });
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
