@@ -23,7 +23,7 @@ import {
 import {useDarkMode} from '../hooks/useDarkMode';
 import axios from 'axios';
 
-const db = SQLite.openDatabase('users.db');
+
 
 const LoginScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -50,19 +50,13 @@ const LoginScreen = ({navigation}) => {
           password,
         },
       );
-      console.log('====================================');
-      console.log(
-        'Response from server when logging in:',
-        JSON.stringify(response.data),
-      );
-      console.log('====================================');
+     
 
       if (response.data.token) {
      const { user, role, token } = response.data;
       dispatch(login({ user, role }));
 
-     console.log('Logged in user:', user);
-      console.log('User role:', role);
+  
 
 
        
