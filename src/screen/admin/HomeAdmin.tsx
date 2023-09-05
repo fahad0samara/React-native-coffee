@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -22,20 +23,21 @@ const HomeAdmin = ({navigation}) => {
   const [coffeeItems, setCoffeeItems] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+    const [isLoading, setIsLoading] = useState(true); // Add loading state
   const isDarkMode = useDarkMode();
 
-  const fetchCoffeeItems = async () => {
+ const fetchCoffeeItems = async () => {
     try {
-      const response = await fetch(
-        'http://192.168.88.171:3000/api/coffee-items',
-      );
+      const response = await fetch('http://192.168.88.216:3000/api/coffee-items');
       const data = await response.json();
       setCoffeeItems(data);
 
-      const uniqueCategories = [...new Set(data.map(item => item.categoryId))];
+      const uniqueCategories = [...new Set(data.map((item) => item.categoryId))];
       setCategories(uniqueCategories);
     } catch (error) {
       console.log('Error fetching coffee data:', error);
+    } finally {
+      setIsLoading(false); // Set loading to false when done
     }
   };
 
@@ -179,6 +181,9 @@ const HomeAdmin = ({navigation}) => {
     
      
       </View>
+       {isLoading ? ( // Render loading indicator if isLoading is true
+          <ActivityIndicator size="large" color={isDarkMode ? 'white' : 'black'} />
+        ) : (
       <SafeAreaView style={styles.safeAreaView}>
         <FlatList
           data={categories}
@@ -205,6 +210,7 @@ const HomeAdmin = ({navigation}) => {
 
         />
       </SafeAreaView>
+      )}
     </View>
   );
 };

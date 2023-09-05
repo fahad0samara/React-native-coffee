@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ImageBackground,
+  
+ } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';

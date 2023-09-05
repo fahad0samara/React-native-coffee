@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image,
   Alert,
+  ActivityIndicator,
  } from 'react-native';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -13,30 +14,28 @@ import {
 
 const UserListScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
   const role = useSelector((state) => state.auth.role);
   const isDarkMode = useDarkMode();
 
   const fetchUsers = () => {
+    setIsLoading(true); // Set loading to true when fetching data
     axios
       .get('http://192.168.88.216:3000/auth/users')
       .then((response) => {
         const userList = response.data;
         setUsers(userList);
-        
-       
       })
       .catch((error) => {
-         Alert.alert(
+        Alert.alert(
           'Error',
           'Something went wrong',
           [{ text: 'OK', style: 'cancel' }],
           { cancelable: true }
         );
-         
-
-
-
-      
+      })
+      .finally(() => {
+        setIsLoading(false); // Set loading to false when done
       });
   };
 
@@ -137,6 +136,14 @@ const UserListScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>User List</Text>
+            {isLoading ? ( 
+              <View>
+        <ActivityIndicator size="large" color={isDarkMode ? 'white' : 'black'} />
+        <Text style={{ textAlign: 'center', color: isDarkMode ? 'white' : 'black' }}>
+          Loading...
+          </Text>
+        </View>
+      ) : (
       <FlatList
         data={users}
         keyExtractor={(item) => item.id.toString()}
@@ -164,8 +171,13 @@ const UserListScreen = ({ navigation }) => {
               </TouchableOpacity>
             )}
           </View>
+        
         )}
       />
+      
+      )
+      }
+
     </View>
   );
 };
