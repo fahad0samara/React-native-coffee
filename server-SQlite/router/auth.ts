@@ -3,12 +3,22 @@ import multer from 'multer';
 import path from 'path';
 import sqlite3 from 'sqlite3';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  profile_image: string;
+  role: string; // Add the 'role' property
+}
 
 // Define a custom type for SQLite error
 type SQLiteError = Error & {errno?: number};
 
 const router = express.Router();
-const db = new sqlite3.Database('user.db');
+const db = new sqlite3.Database('auth.db');
 const cloudinary = require('cloudinary').v2;
 
 // Define the storage for image uploads using Multer
@@ -30,14 +40,15 @@ db.serialize(() => {
       name TEXT,
       email TEXT UNIQUE,
       password TEXT,
-      profile_image TEXT
+      profile_image TEXT,
+     role TEXT DEFAULT 'user' 
     )
   `);
 });
 
 // Registration endpoint
 router.post('/register', upload.single('profile_image'), async (req, res) => {
-  const {name, email, password} = req.body;
+  const {name, email, password, role} = req.body;
   const profileImageBuffer = req.file ? req.file.buffer : null;
 
   try {
@@ -57,37 +68,32 @@ router.post('/register', upload.single('profile_image'), async (req, res) => {
         public_id: `coffee-${Date.now()}`, // Specify the public ID for the image
         overwrite: true, // Overwrite existing image if necessary
       };
-
-      // Upload the profile image to Cloudinary
-      const result = await cloudinary.uploader.upload_stream(
-        uploadOptions,
-        (error: SQLiteError | null, result: any) => {
-          if (error) {
-            console.error('Error uploading image to Cloudinary:', error);
-            return res.status(500).json({error: 'Internal'});
-          }
-
-          imageUri = result.secure_url;
-
-          // Insert the user into the database with the uploaded image
-          insertUser(name, email, hashedPassword, imageUri, res);
-        },
-      );
-
-      result.end(profileImageBuffer);
-    } else {
-      // Insert the user into the database without a profile image (use a default image URL)
-      const defaultImageUrl =
-        'https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o='; // Replace with your default image URL
-      insertUser(name, email, hashedPassword, defaultImageUrl, res);
+         const result = await cloudinary.uploader
+      .upload_stream(uploadOptions, async (error:any, result:any) => {
+        if (error) {
+          console.error('Error uploading image to Cloudinary:', error);
+          res.status(500).json(error);
+        } else {
+    imageUri = result.secure_url;
+    // Continue with storing data in the database
+    insertUser(name, email, hashedPassword, imageUri, res);
+        }
+      }
+      )
+      .end(profileImageBuffer);
+    }
+    else {
+      // Continue with storing data in the database
+      insertUser(name, email, hashedPassword, imageUri, res, role);
     }
   } catch (error) {
     console.error('Error registering user:', error);
-    return res.status(500).json({
-      error,
-    });
+    res.status(500).json(error);
   }
-});
+}
+);
+
+
 
 // Function to insert a user into the database
 function insertUser(
@@ -96,22 +102,85 @@ function insertUser(
   hashedPassword: string,
   imageUri: string | null,
   res: Response,
+  role: string = 'user',
 ) {
-  db.run(
-    'INSERT INTO users (name, email, password, profile_image) VALUES (?, ?, ?, ?)',
-    [name, email, hashedPassword, imageUri],
-    (err: SQLiteError | null) => {
-      if (err) {
-        if (err.errno === sqlite3.CONSTRAINT) {
-          return res.status(400).json({error: 'Email address already exists'});
-        }
-        console.error('Database error:', err);
-        return res.status(500).json({error: 'Internal server error'});
-      }
+ db.run(
+   'INSERT INTO users (name, email, password, profile_image, role) VALUES (?, ?, ?, ?, ?)',
+   [name, email, hashedPassword, imageUri, role],
+   (err: SQLiteError | null) => {
+     if (err) {
+       if (err.errno === sqlite3.CONSTRAINT) {
+         return res.status(400).json({error: 'Email address already exists'});
+       }
+       console.error('Database error:', err);
+       return res.status(500).json({error: 'Internal server error'});
+     }
 
-      return res.status(201).json({message: 'User registered successfully'});
-    },
-  );
+     return res.status(201).json({message: 'User registered successfully'});
+   },
+ );
 }
+
+// Function to fetch user data by email
+async function getUserByEmail(email: string): Promise<User | null> {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(row ? (row as User) : null);
+    });
+  });
+}
+
+
+
+// In the login route, specify the type of user
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Fetch user data from the database based on the provided email
+    const user: User | null = await getUserByEmail(email);
+
+    // Check if a user with the provided email exists
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Compare the provided password with the hashed password in the database
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // If authentication is successful, you can generate a token here and send it as a response
+    // For example, using a JWT token
+    // Generate a JWT token for authentication
+    const token = jwt.sign(
+      { userId: user.id, userEmail: user.email, userRole: user.role },
+      "awafdasfdf",
+      
+      
+      { expiresIn: '1h' }
+    );
+
+    // Send a success response or the token to the client
+    return res.status(200).json({
+      message: 'Login successful',
+      token: token,
+      role: user.role,
+      user: user,
+    });
+  } catch (error) {
+    console.error('Error during login:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
+
 
 export default router;

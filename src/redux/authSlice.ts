@@ -4,6 +4,8 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user: null,
+    
+    
     role: '', // Initialize role as an empty string
   },
   reducers: {

@@ -24,6 +24,8 @@ const Register = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [profileImage, setprofileImage] = useState(null);
+  const [role, setRole] = useState('user'); // Default role is 'user'
+
     const isDarkMode = useDarkMode();
 const handleRegister = async () => {
   if (!name) {
@@ -36,23 +38,21 @@ const handleRegister = async () => {
   }
 
   try {
-    // Create a FormData object for multipart/form-data
     const formData = new FormData();
     formData.append('name', name);
     formData.append('email', email);
     formData.append('password', password);
+    formData.append('role', role);
 
     if (profileImage) {
       formData.append('profile_image', {
-        uri: profileImage.uri,
-        name: 'profileImage.jpg',
-        type: 'image/jpeg',
+        uri: profileImage,
+        name: 'profile_image',
+        type: 'image/jpg',
       });
     }
 
-    console.log('Registering user with name, email, password, and profile image:', name, email, password, profileImage);
-
-    const response = await fetch('http://192.168.88.171:3000/auth/register', {
+    const response = await fetch('http://192.168.88.216:3000/auth/register', {
       method: 'POST',
       body: formData,
       headers: {
@@ -63,17 +63,19 @@ const handleRegister = async () => {
     const data = await response.json();
     console.log('Server response:', data);
 
-    if (data.success) {
+    if (data.message === 'User registered successfully') {
       Alert.alert('Success', 'User registered successfully');
       navigation.navigate('Login');
     } else {
-      Alert.alert('Error', 'An error occurred while registering user');
+      console.log('Server error:', data.error);
+      Alert.alert('Error', data.error || 'An error occurred while registering user');
     }
   } catch (error) {
-    console.log(error);
+    console.log('Error registering user:', error);
     Alert.alert('Error', 'An error occurred while registering user');
   }
 };
+
 
 
   const handleImageSelection = () => {
