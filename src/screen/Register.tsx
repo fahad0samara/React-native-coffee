@@ -52,7 +52,7 @@ const handleRegister = async () => {
       });
     }
 
-    const response = await fetch('http://192.168.88.216:3000/auth/register', {
+    const response = await fetch('http://192.168.88.82:3000/auth/register', {
       method: 'POST',
       body: formData,
       headers: {
