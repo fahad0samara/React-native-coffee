@@ -44,7 +44,7 @@ const LoginScreen = ({navigation}) => {
 
     try {
       const response = await axios.post(
-        'http://192.168.88.82:3000/auth/login', // Replace with your server's login endpoint
+        'http://192.168.88.84:3000/auth/login', // Replace with your server's login endpoint
         {
           email,
           password,
