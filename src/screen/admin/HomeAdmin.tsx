@@ -28,7 +28,7 @@ const HomeAdmin = ({navigation}) => {
 
  const fetchCoffeeItems = async () => {
     try {
-      const response = await fetch('http://192.168.88.82:3000/api/coffee-items');
+      const response = await fetch('https://coffe-api.azurewebsites.net/api/coffee-items');
       const data = await response.json();
       setCoffeeItems(data);
 

@@ -62,7 +62,7 @@ const AddCoffeeScreen = ({navigation}) => {
     formData.append('roastLevel', roastLevel);
 
     try {
-      const response = await fetch('http://192.168.88.171:3000/api/add-coffee', {
+      const response = await fetch('https://coffe-api.azurewebsites.net/api/add-coffee', {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',

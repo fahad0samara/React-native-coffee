@@ -44,12 +44,16 @@ const LoginScreen = ({navigation}) => {
 
     try {
       const response = await axios.post(
-        'http://192.168.88.84:3000/auth/login', // Replace with your server's login endpoint
+        'https://coffe-api.azurewebsites.net/auth/login', // Replace with your server's login endpoint
         {
           email,
           password,
         },
       );
+
+      console.log('====================================');
+      console.log(response);
+      console.log('====================================');
      
 
       if (response.data.token) {
@@ -70,7 +74,9 @@ const LoginScreen = ({navigation}) => {
         Alert.alert('Error', 'Invalid email or password');
       }
     } catch (error) {
-      console.error('Error during login:', error);
+      console.error('Error during login:', 
+      error.response.data.error
+      );
       Alert.alert('Error', 'Internal server error');
     }
   };

@@ -21,7 +21,7 @@ const UserListScreen = ({ navigation }) => {
   const fetchUsers = () => {
     setIsLoading(true); // Set loading to true when fetching data
     axios
-      .get('http://192.168.88.216:3000/auth/users')
+      .get('https://coffe-api.azurewebsites.net/auth/users')
       .then((response) => {
         const userList = response.data;
         setUsers(userList);
@@ -70,7 +70,7 @@ const UserListScreen = ({ navigation }) => {
         onPress: () => {
           // User confirmed, proceed with deletion
           axios
-            .delete(`http://192.168.88.216:3000/auth/delete/${id}`)
+            .delete(`https://coffe-api.azurewebsites.net/auth/delete/${id}`)
             .then(() => {
               fetchUsers();
             })

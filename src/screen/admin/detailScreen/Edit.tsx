@@ -84,7 +84,7 @@ const handleSave = () => {
 
     // Send a PUT or PATCH request to update the coffee item on the server
     axios
-      .put(`http://192.168.88.171:3000/api/update-coffee/${editedItem.id}`, updatedCoffeeItem)
+      .put(`https://coffe-api.azurewebsites.net/api/update-coffee/${editedItem.id}`, updatedCoffeeItem)
       .then(response => {
         // Handle the success response here, e.g., show a confirmation message
         Alert.alert(
