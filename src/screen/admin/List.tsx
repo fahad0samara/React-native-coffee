@@ -153,7 +153,7 @@ const UserListScreen = ({ navigation }) => {
               source={
                 item.profile_image
                   ? { uri: item.profile_image }
-                  : require('../../image/left.png')
+                  : require('../../image/profile1.png')
               }
               style={styles.profileImage}
             />

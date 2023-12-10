@@ -256,12 +256,12 @@ avatarr: {
       <StatusBar />
       <View style={styles.backgroundImage}>
         <Image
-          source={require('../image/dd.png')}
+          source={require('../image/profile.png')}
           style={styles.leftImage}
           resizeMode="cover"
         />
         <Image
-          source={require('../image/dd.png')}
+          source={require('../image/profile.png')}
           style={styles.rightImage}
           resizeMode="cover"
         />
