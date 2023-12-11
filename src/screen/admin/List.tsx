@@ -11,7 +11,8 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { USERS_URL } from '../../apiConfig';
+import { USERS_URL,DELETE_USERS_URL } from '../../apiConfig';
+
 const UserListScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // Add loading state
@@ -33,6 +34,7 @@ const UserListScreen = ({ navigation }) => {
           [{ text: 'OK', style: 'cancel' }],
           { cancelable: true }
         );
+        console.error('Error fetching users:', error);
       })
       .finally(() => {
         setIsLoading(false); // Set loading to false when done
@@ -70,7 +72,7 @@ const UserListScreen = ({ navigation }) => {
         onPress: () => {
           // User confirmed, proceed with deletion
           axios
-            .delete(`https://coffe-api.azurewebsites.net/auth/delete/${id}`)
+            .delete(DELETE_USERS_URL(id))
             .then(() => {
               fetchUsers();
             })
