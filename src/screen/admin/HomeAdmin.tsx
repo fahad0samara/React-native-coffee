@@ -17,18 +17,19 @@ import {
   widthPercentageToDP,
   heightPercentageToDP,
 } from 'react-native-responsive-screen';
+import { COFFEE_ITEMS_URL } from '../../apiConfig';
 
 const HomeAdmin = ({navigation}) => {
   const isFocused = useIsFocused();
   const [coffeeItems, setCoffeeItems] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("espresso");
     const [isLoading, setIsLoading] = useState(true); // Add loading state
   const isDarkMode = useDarkMode();
 
  const fetchCoffeeItems = async () => {
     try {
-      const response = await fetch('https://coffe-api.azurewebsites.net/api/coffee-items');
+      const response = await fetch(COFFEE_ITEMS_URL);
       const data = await response.json();
       setCoffeeItems(data);
 

@@ -23,7 +23,7 @@ import {
 } from 'react-native-responsive-screen';
 import {useDarkMode} from '../../hooks/useDarkMode';
 
-
+import { ADD_COFFEE_URL  } from '../../apiConfig';
 const AddCoffeeScreen = ({navigation}) => {
   const isDarkMode = useDarkMode();
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -62,7 +62,7 @@ const AddCoffeeScreen = ({navigation}) => {
     formData.append('roastLevel', roastLevel);
 
     try {
-      const response = await fetch('https://coffe-api.azurewebsites.net/api/add-coffee', {
+      const response = await fetch(ADD_COFFEE_URL , {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',

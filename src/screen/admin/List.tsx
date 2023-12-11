@@ -11,7 +11,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-
+import { USERS_URL } from '../../apiConfig';
 const UserListScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // Add loading state
@@ -21,7 +21,7 @@ const UserListScreen = ({ navigation }) => {
   const fetchUsers = () => {
     setIsLoading(true); // Set loading to true when fetching data
     axios
-      .get('https://coffe-api.azurewebsites.net/auth/users')
+      .get(USERS_URL)
       .then((response) => {
         const userList = response.data;
         setUsers(userList);

@@ -16,7 +16,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useDarkMode } from '../hooks/useDarkMode';
 import axios from 'axios';
-
+import {REGISTER_URL  } from '../../apiConfig';
 const db = SQLite.openDatabase('users.db');
 
 const Register = ({navigation}) => {
@@ -52,7 +52,7 @@ const handleRegister = async () => {
       });
     }
 
-    const response = await fetch('https://coffe-api.azurewebsites.net/auth/register', {
+    const response = await fetch(REGISTER_URL , {
       method: 'POST',
       body: formData,
       headers: {

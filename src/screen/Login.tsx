@@ -23,7 +23,7 @@ import {
 import {useDarkMode} from '../hooks/useDarkMode';
 import axios from 'axios';
 
-
+import { LOGIN_URL } from '../../apiConfig';
 
 const LoginScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -44,7 +44,8 @@ const LoginScreen = ({navigation}) => {
 
     try {
       const response = await axios.post(
-        'https://coffe-api.azurewebsites.net/auth/login', // Replace with your server's login endpoint
+        LOGIN_URL ,
+
         {
           email,
           password,

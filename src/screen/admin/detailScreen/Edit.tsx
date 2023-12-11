@@ -17,6 +17,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { widthPercentageToDP, heightPercentageToDP } from 'react-native-responsive-screen';
 import { useDarkMode } from '../../../hooks/useDarkMode';
 import {launchImageLibrary} from 'react-native-image-picker';
+import { UPDATE_COFFEE_ITEM_URL } from '../../../apiConfig';
 const Edit = ({ route, navigation }) => {
   const { item } = route.params;
   
@@ -84,7 +85,7 @@ const handleSave = () => {
 
     // Send a PUT or PATCH request to update the coffee item on the server
     axios
-      .put(`https://coffe-api.azurewebsites.net/api/update-coffee/${editedItem.id}`, updatedCoffeeItem)
+      .put(UPDATE_COFFEE_ITEM_URL(editedItem.id), updatedCoffeeItem)
       .then(response => {
         // Handle the success response here, e.g., show a confirmation message
         Alert.alert(
