@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useDarkMode } from '../../hooks/useDarkMode';
 import { widthPercentageToDP, heightPercentageToDP } from 'react-native-responsive-screen';
 import axios from 'axios';
+import {DELETE_COFFEE_ITEM_URL } from '../../apiConfig'
 
 const CoffeeDetailScreen = ({ route, navigation }) => {
   const { item } = route.params;
@@ -106,6 +107,8 @@ const CoffeeDetailScreen = ({ route, navigation }) => {
 
   const handleDelete = () => {
     // Show an alert to confirm deletion
+      console.log('DELETE URL:', DELETE_COFFEE_ITEM_URL(item.id));
+
     Alert.alert(
       'Confirm Deletion',
       'Are you sure you want to delete this coffee item?',
@@ -119,7 +122,7 @@ const CoffeeDetailScreen = ({ route, navigation }) => {
           onPress: () => {
             // Send a DELETE request to your server to delete the coffee item
             axios
-              .delete(`https://coffe-api.azurewebsites.net/api/delete-coffee/${item.id}`)
+             .delete(DELETE_COFFEE_ITEM_URL(item.id))
               .then(response => {
                 // Handle the success response here, e.g., show a confirmation message
 

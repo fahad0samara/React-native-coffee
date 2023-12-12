@@ -46,6 +46,8 @@ const UserListScreen = ({ navigation }) => {
   }, []);
 
  const deleteUser = (id, userRole) => {
+    console.log('DELETE URL:', DELETE_USERS_URL(id));
+
   if (userRole === 'admin' && role === 'admin') {
     // If the user is an admin and is trying to delete their own account
     Alert.alert(
@@ -72,7 +74,7 @@ const UserListScreen = ({ navigation }) => {
         onPress: () => {
           // User confirmed, proceed with deletion
           axios
-            .delete(DELETE_USERS_URL(id))
+              .delete(DELETE_USERS_URL(id))
             .then(() => {
               fetchUsers();
             })

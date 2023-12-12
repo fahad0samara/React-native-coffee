@@ -1,10 +1,10 @@
 export const coffeeCategories = [
-  {id: 'espresso', name: 'Espresso'},
-  {id: 'cappuccino', name: 'Cappuccino'},
-  {id: 'latte', name: 'Latte'},
-  {id: 'mocha', name: 'Mocha'},
-  {id: 'americano', name: 'Americano'},
-  {id: 'flat_white', name: 'Flat White'},
+  {id: 'Espresso', name: 'Espresso'},
+  {id: 'Cappuccino', name: 'Cappuccino'},
+  {id: 'Latte', name: 'Latte'},
+  {id: 'Mocha', name: 'Mocha'},
+  {id: 'Americano', name: 'Americano'},
+  {id: 'Flat_white', name: 'Flat White'},
 ];
 
 // ... (previous imports and code)

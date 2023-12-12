@@ -23,7 +23,7 @@ const HomeAdmin = ({navigation}) => {
   const isFocused = useIsFocused();
   const [coffeeItems, setCoffeeItems] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("espresso");
+  const [selectedCategory, setSelectedCategory] = useState("Espresso");
     const [isLoading, setIsLoading] = useState(true); // Add loading state
   const isDarkMode = useDarkMode();
 
