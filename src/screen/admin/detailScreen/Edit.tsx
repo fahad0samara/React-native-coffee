@@ -77,16 +77,42 @@ const styles = StyleSheet.create({
       }
     });
   };
-const handleSave = () => {
-  // Check if editedItem is defined and has the necessary properties
-  if (editedItem && editedItem.imageUri) {
-    // Include the updated image URI in the edited item
-    const updatedCoffeeItem = { ...editedItem, imageUri };
-
-    // Send a PUT or PATCH request to update the coffee item on the server
-    axios
-      .put(UPDATE_COFFEE_ITEM_URL(editedItem.id), updatedCoffeeItem)
-      .then(response => {
+  const handleSave = async () => {
+    // Check if editedItem is defined and has the necessary properties
+    if (editedItem && imageUri) {
+      // Include the updated image URI in the edited item
+      const updatedCoffeeItem = { ...editedItem, imageUri };
+  
+      // Log the imageUri before making the API call
+      console.log('Image URI before API call:', imageUri);
+  
+      // Create a FormData object
+      const formData = new FormData();
+  
+      // Append the image data with a unique filename
+      formData.append('image', {
+        uri: imageUri,
+        name: `coffee_image_${Date.now()}.jpg`, // Use a unique filename
+        type: 'image/jpeg',
+      });
+  
+      // Loop through the updatedCoffeeItem properties and append them to FormData
+      Object.keys(updatedCoffeeItem).forEach(key => {
+        formData.append(key, updatedCoffeeItem[key]);
+      });
+  
+      try {
+        // Send a PUT or PATCH request to update the coffee item on the server
+        const response = await axios.put(
+          UPDATE_COFFEE_ITEM_URL(editedItem.id),
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
+  
         // Handle the success response here, e.g., show a confirmation message
         Alert.alert(
           'Success',
@@ -102,8 +128,7 @@ const handleSave = () => {
           ],
           { cancelable: false }
         );
-      })
-      .catch(error => {
+      } catch (error) {
         // Handle errors, e.g., show an error message
         console.error('Error updating coffee item:', error);
         Alert.alert(
@@ -112,18 +137,19 @@ const handleSave = () => {
           [{ text: 'OK', onPress: () => {} }],
           { cancelable: false }
         );
-      });
-  } else {
-    // Handle the case where editedItem is undefined or lacks the required properties
-    console.error('Invalid editedItem:', editedItem);
-    Alert.alert(
-      'Error',
-      'Invalid editedItem. Please check the data and try again.',
-      [{ text: 'OK', onPress: () => {} }],
-      { cancelable: false }
-    );
-  }
-};
+      }
+    } else {
+      // Handle the case where editedItem or imageUri is undefined or lacks the required properties
+      console.error('Invalid editedItem or imageUri:', editedItem, imageUri);
+      Alert.alert(
+        'Error',
+        'Invalid editedItem or imageUri. Please check the data and try again.',
+        [{ text: 'OK', onPress: () => {} }],
+        { cancelable: false }
+      );
+    }
+  };
+  
 
 
 

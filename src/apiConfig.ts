@@ -5,7 +5,7 @@ export const USERS_URL = `${API_BASE_URL}/auth/users`;
 
 export const ADD_COFFEE_URL = `${API_BASE_URL}/api/add-coffee`;
 
-export const UPDATE_COFFEE_ITEM_URL = itemId =>
+export const UPDATE_COFFEE_ITEM_URL = (itemId: any) =>
   `${API_BASE_URL}/api/update-coffee/${itemId}`;
 
 export const REGISTER_URL = `${API_BASE_URL}/auth/register`;
