@@ -16,6 +16,7 @@ const AdminProfile = ({ navigation }) => {
 
   const handleLogout = () => {
     dispatch(logout());
+    
   };
 
   const dynamicStyles = StyleSheet.create({
